@@ -1,12 +1,19 @@
 <?php
 
+use JetBrains\PhpStorm\Internal\ReturnTypeContract;
+
 class User extends Model{
 
     protected $allowedColumns = [
-        'name',
+        'firstname',
+        'lastname',
+        'email',
+        'password',
+        'gender',
+        'rank',
     ];
 
-    protected $beforInsert = [
+    protected $beforeInsert = [
         'hash_password',
     ];
 
@@ -16,30 +23,46 @@ class User extends Model{
         $this->errors = array();
 
         # validate firstname
-        if(empty($data['firstname']) || !preg_match('/^[a-zA-Z]$/', $data['firstname'])){
-            $this->errors['firstname'] = "Only letters allowed in first name!";
+        if(empty($data['firstname']) || preg_match('/^[a-zA-Z]$/', $data['firstname'])){
+            $this->errors['firstname'] = "Seules les lettres sont autorisées dans le prénom !";
         }
 
         # validate lastname
-        if(empty($data['lastname']) || !preg_match("/^[a-zA-Z]$/", $data['lastname'])){
-            $this->errors['lastname'] = "Only letters allowed in last name!";
+        if(empty($data['lastname']) || preg_match("/^[a-zA-Z]$/", $data['lastname'])){
+            $this->errors['lastname'] = "Seules les lettres sont autorisées dans le nom !";
         }
 
         # validate email
-        if(empty($data['email']) || filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
-            $this->errors['email'] = "E-mail is not valid!";
+        if(empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
+            $this->errors['email'] = "L'email n'est pas valide!";
+        }
+
+        #validate gender
+        $genders = ['male', 'female'];
+        if(empty($data['gender']) || !in_array($data['gender'], $genders) ){
+            $this->errors['gender'] = "Le sexe n'est pas valide !";
+        }
+
+        #validate rank
+        $ranks = ['agent', 'admin'];
+        if(empty($data['gender']) || !in_array($data['rank'], $ranks) ){
+            $this->errors['rank'] = "Le rang n'est pas valide !";
         }
 
         # validate passwords
         if(empty($data['password']) || $data['password'] != $data['password2']){
-            $this->errors['password'] = "Passwords doesn't match!";
+            $this->errors['password'] = "Les mots de passe ne correspondent pas !";
         }
 
-        if(strlen($data['password']) <= 8){
-            $this->errors['password'] = "Passwords must be at least 8 characters long!";
+        if(strlen($data['password']) < 8){
+            $this->errors['password'] = "Les mots de passe doivent comporter au moins 8 caractères !";
         }
 
-        //return false;
+        if (count($this->errors) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     public function make_user_id($data){
@@ -53,19 +76,5 @@ class User extends Model{
 
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         return $data;
-    }
-
-    public function randomString($length){
-        # code...
-        $array = array(0,1,2,3,4,5,6,7,8,9,'a','b','b','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',);
-        $text = '';
-
-        for ($i=0 ; $i < $length ; $i++ ) { 
-            # code...
-            $random = rand(0, 61);
-            $text .= $array[$random];
-        }
-
-        return $text;
     }
 }

@@ -31,7 +31,7 @@ class Model extends database{
 
         // remove unwanted columns
         if(property_exists($this, 'allowedColumns')){
-            foreach ($this->beforeInsert as $key => $column) {
+            foreach ($this->allowedColumns as $key => $column) {
                 # code...
                 if (in_array($key, $this->allowedColumns)) {
                     # code...

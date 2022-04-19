@@ -40,7 +40,7 @@ class Auth {
         return false;
     }
 
-    public static function __call($method, $params)
+    public static function __callStatic($method, $params)
     {
         $prop = strtolower(str_replace("get", "", $method));
 

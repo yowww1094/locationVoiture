@@ -9,5 +9,5 @@ define("DBTYPE", "mysql");
 
 
 //define("ROOT", "http://localhost/project/public");
-define("ROOT", "../private/app");
+define("ROOT", "../public");
 define("ASSETS", "../public/assets");
