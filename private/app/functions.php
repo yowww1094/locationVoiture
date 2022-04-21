@@ -38,3 +38,17 @@ function randomString($length){
 
     return $text;
 }
+
+function extract_image($image){
+       
+}
+
+function date_duration($date1, $date2){
+
+	$date1 = new DateTime($date1);
+	$date2 = new DateTime($date2);
+    
+	$interval = $date1->diff($date2);
+
+	return $interval->days;
+}

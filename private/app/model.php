@@ -31,9 +31,10 @@ class Model extends database{
 
         // remove unwanted columns
         if(property_exists($this, 'allowedColumns')){
-            foreach ($this->allowedColumns as $key => $column) {
+
+            foreach ($data as $key => $column) {
                 # code...
-                if (in_array($key, $this->allowedColumns)) {
+                if (!in_array($key, $this->allowedColumns)) {
                     # code...
                     unset($data[$key]);
                 }
@@ -67,7 +68,7 @@ class Model extends database{
         
         $data['id'] = $id;
         $query = "update  $this->table set $str where id = :id";
-        echo $query;
+        
         return $this->query($query, $data);
     }
 

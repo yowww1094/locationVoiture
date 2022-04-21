@@ -13,7 +13,6 @@ class Auth {
         # code...
         if(isset($_SESSION['USER']))
         {
-
             unset($_SESSION['USER']);
         }
     }

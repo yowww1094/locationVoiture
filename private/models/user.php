@@ -1,7 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\Internal\ReturnTypeContract;
-
 class User extends Model{
 
     protected $allowedColumns = [
@@ -23,12 +21,12 @@ class User extends Model{
         $this->errors = array();
 
         # validate firstname
-        if(empty($data['firstname']) || preg_match('/^[a-zA-Z]$/', $data['firstname'])){
+        if(empty($data['firstname']) || preg_match('/[^a-zA-Z]$/', $data['firstname'])){
             $this->errors['firstname'] = "Seules les lettres sont autorisées dans le prénom !";
         }
 
         # validate lastname
-        if(empty($data['lastname']) || preg_match("/^[a-zA-Z]$/", $data['lastname'])){
+        if(empty($data['lastname']) || preg_match("/[^a-zA-Z]$/", $data['lastname'])){
             $this->errors['lastname'] = "Seules les lettres sont autorisées dans le nom !";
         }
 
@@ -65,12 +63,12 @@ class User extends Model{
         return true;
     }
 
-    public function make_user_id($data){
+    /*public function make_user_id($data){
 
-        //$data['user_id'] = $this->randomString(60);
+        $data['user_id'] = $data['firstname'] . "." . $data['lastname'];
         return $data;
 
-    }
+    }*/
 
     public function hash_password($data){
 

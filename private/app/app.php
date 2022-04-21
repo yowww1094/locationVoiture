@@ -14,7 +14,7 @@ class App{
         if(file_exists("../private/controllers/" .$URL[0].".php")){
 
             $this->controller = ucfirst($URL[0]);
-            unset($URL[0]); 
+            unset($URL[0]);
         }
          
         require "../private/controllers/" . $this->controller . ".php";
@@ -25,14 +25,12 @@ class App{
 
                 $this->method = ucfirst($URL[1]);
                 unset($URL[1]);
-
             }
         }
 
         $URL = array_values($URL);
         $this->params = $URL;
         call_user_func_array([$this->controller,$this->method], $this->params);
-        
     }
 
     private function getURL(){

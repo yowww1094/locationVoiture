@@ -4,7 +4,7 @@
         <div class="p-4 mx-auto shadow rounded" style="margin-top: 50px; width:100%; max-width:350px">
 
             <h2 class="text-center">LOGO</h2>
-            <img src="<?=ASSETS?>/logo.png" alt="LOGO" class="d-block mx-auto rounded-circle" style="width: 180px;">
+            <img src="<?=ASSETS?>/images/logo.png" alt="LOGO" class="d-block mx-auto rounded-circle" style="width: 180px;">
             <br>
             <h3 class="text-center">Login</h3>
             <hr>
