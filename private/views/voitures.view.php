@@ -15,23 +15,41 @@
 
             <div class="row">
 
-                <?php if(isset($rows) && $rows): ?>
-                    <?php foreach($rows as $row): ?>
-                        <div class="col-4">
-                            <div class="card" style="width: 18rem;">
+                <?php if(isset($rows['available']) && $rows['available']): ?>
+                    <?php foreach($rows['available'] as $row['available']): ?>
+                        
 
-                                <?php if($row->image_voiture): ?>
-                                    <img src="<?=$row->image_voiture?>" class="card-img-top">
-                                <?php else: ?>
-                                    <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
-                                <?php endif; ?>
-                                
+                        <div class="col-md-4">
+                            <div class="card card-user">
                                 <div class="card-body">
-                                    <h3 class="card-title text-center font-weight-bold"><?=ucfirst($row->marque)?></h3>
-                                    <p class="card-text text-center"><?=$row->model?></p>
-                                    <br>
-                                    <p class="card-text">Date d'ajoute: <?=$row->date_added?></p>
-                                    <a href="#" class="btn btn-primary">Voir detailles...</a>
+                                    <p class="card-text">
+                                        <div class="author">
+                                            <a href="<?=ROOT?>/voitures/details/<?=$row['available']->matricule?>">
+
+                                                <?php if($row['available']->image_voiture): ?>
+                                                    <img src="<?=$row['available']->image_voiture?>" class="card-img-top">
+                                                <?php else: ?>
+                                                    <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
+                                                <?php endif; ?>
+
+                                                <h5 class="title"><?=ucfirst($row['available']->marque)?> <?=$row['available']->model?></h5>
+                                            </a>
+                                        </div>
+                                    </p>
+                                    <div class="card-description">
+                                        <h5>Date d'assurance: <?=get_date($row['available']->date_assurance)?></h5>
+                                        <h5>Date de viniete: <?=get_date($row['available']->date_viniete)?></h5>
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-center">
+                                    <div class="button-container">
+                                        <a href="<?=ROOT?>/voitures/details/<?=$row['available']->matricule?>">
+                                            <button class="btn btn-sm btn-primary">Detailles..</button>
+                                        </a>
+                                        <a href="<?=ROOT?>/locations/add/<?=$row['available']->matricule?>">
+                                            <button class="btn btn-sm btn-primary">Faire location</button>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -44,32 +62,50 @@
             <br>
             <hr>
             <h3>Voitures en location:</h3>
-            
 
-            <?php if(isset($rows) && $rows): ?>
-                <?php foreach($rows as $row): ?>
+            <div class="row">
 
-                    <div class="card" style="width: 18rem;">
-
-                        <?php if($row->image_voiture): ?>
-                            <img src="<?=$row->image_voiture?>" class="card-img-top">
-                        <?php else: ?>
-                            <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
-                        <?php endif; ?>
+                <?php if(isset($rows['unavailable']) && $rows['unavailable']): ?>
+                    <?php foreach($rows['unavailable'] as $row['unavailable']): ?>
                         
-                        <div class="card-body">
-                            <h3 class="card-title text-center font-weight-bold"><?=ucfirst($row->marque)?></h3>
-                            <p class="card-text text-center"><?=$row->model?></p>
-                            <br>
-                            <p class="card-text">Date d'ajoute: <?=$row->date_added?></p>
-                            <a href="#" class="btn btn-primary">Voir detailles...</a>
-                        </div>
-                    </div>
 
-                <?php endforeach; ?>
-            <?php else: ?>
-                <h2 class="text-center">Pas de voiture en location!</h2>
-            <?php endif; ?>
+                        <div class="col-md-4">
+                            <div class="card card-user">
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <div class="author">
+                                            <a href="<?=ROOT?>/voitures/details/<?=$row['unavailable']->matricule?>">
+
+                                                <?php if($row['unavailable']->image_voiture): ?>
+                                                    <img src="<?=$row['unavailable']->image_voiture?>" class="card-img-top">
+                                                <?php else: ?>
+                                                    <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
+                                                <?php endif; ?>
+
+                                                <h5 class="title"><?=ucfirst($row['unavailable']->marque)?> <?=$row['unavailable']->model?></h5>
+                                            </a>
+                                        </div>
+                                    </p>
+                                    <div class="card-description">
+                                        <h5>Date d'assurance: <?=get_date($row['unavailable']->date_assurance)?></h5>
+                                        <h5>Date de viniete: <?=get_date($row['unavailable']->date_viniete)?></h5>
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-center">
+                                    <div class="button-container">
+                                        <a href="<?=ROOT?>/voitures/details/<?=$row['unavailable']->matricule?>">
+                                            <button class="btn btn-sm btn-primary">Detailles..</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <h2 class="text-center">Pas de voiture disponible!</h2>
+                <?php endif; ?>
+            </div>
             
 
         </div>

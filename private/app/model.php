@@ -16,15 +16,35 @@ class Model extends database{
     public function where($column, $value){
         $query = "select * from $this->table where $column = :value";
 
-        return $this->query($query, [
+        $data = $this->query($query, [
             'value' => $value
         ]);
+
+        // run functions after select
+        if(property_exists($this, 'afterSelect')){
+            foreach ($this->afterSelect as $func) {
+                # code...
+                $data  = $this->$func($data);
+            }
+        }
+
+        return $data;
     }
 
     public function findAll(){
         $query = "select * from $this->table";
 
-        return $this->query($query);
+        $data = $this->query($query);
+
+        // run functions after select
+        if(property_exists($this, 'afterSelect')){
+            foreach ($this->afterSelect as $func) {
+                # code...
+                $data  = $this->$func($data);
+            }
+        }
+
+        return $data;
     }
 
     public function insert($data){
@@ -58,7 +78,7 @@ class Model extends database{
         return $this->query($query, $data);
     }
 
-    public function update($id, $data){
+    public function update($column, $value, $data){
 
         $str = "";
         foreach($data as $key => $val){
@@ -66,9 +86,9 @@ class Model extends database{
         }
         $str = trim($str, ",");
         
-        $data['id'] = $id;
-        $query = "update  $this->table set $str where id = :id";
-        
+        $data['value'] = $value;
+        $query = "update  $this->table set $str where $column = :value";
+
         return $this->query($query, $data);
     }
 

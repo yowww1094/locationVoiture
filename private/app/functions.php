@@ -40,7 +40,7 @@ function randomString($length){
 }
 
 function extract_image($image){
-       
+    
 }
 
 function date_duration($date1, $date2){
@@ -51,4 +51,9 @@ function date_duration($date1, $date2){
 	$interval = $date1->diff($date2);
 
 	return $interval->days;
+}
+
+function get_date($date){
+    
+    return $date;
 }

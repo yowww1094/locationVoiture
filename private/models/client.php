@@ -5,9 +5,10 @@ class Client extends Model{
     protected $allowedColumns = [
         'nom',
         'prenom',
+        'cin',
         'cin_img',
         'permis_img',
-        'phone',
+        'client_phone',
         'date_added',
     ];
 
@@ -21,13 +22,18 @@ class Client extends Model{
         $date = date("Y-m-d H:i:s");
 
         # validate firstname
-        if(empty($data['firstname']) || preg_match('/[^a-zA-Z]$/', $data['firstname'])){
-            $this->errors['firstname'] = "Seules les lettres sont autorisées dans le prénom !";
+        if(empty($data['prenom']) || preg_match('/[^a-zA-Z]$/', $data['prenom'])){
+            $this->errors['prenom'] = "Seules les lettres sont autorisées dans le prénom !";
         }
 
         # validate lastname
-        if(empty($data['lastname']) || preg_match("/[^a-zA-Z]$/", $data['lastname'])){
-            $this->errors['lastname'] = "Seules les lettres sont autorisées dans le nom !";
+        if(empty($data['nom']) || preg_match("/[^a-zA-Z]$/", $data['nom'])){
+            $this->errors['nom'] = "Seules les lettres sont autorisées dans le nom !";
+        }
+
+        # validate cin
+        if(empty($data['nom'])){
+            $this->errors['nom'] = "CIN est vide !";
         }
 
         # validate cin_img

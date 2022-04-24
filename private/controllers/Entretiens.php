@@ -71,7 +71,7 @@ class Entretiens extends controller{
 
                 if($entretien->validate($_POST)){
 
-                    $entretien->update($entretienId, $_POST);
+                    //$entretien->update($entretienId, $_POST);
 
                     $this->redirect("entretiens");
                 }else{

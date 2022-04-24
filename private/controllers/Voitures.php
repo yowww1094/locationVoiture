@@ -11,7 +11,11 @@ class Voitures extends controller{
 
         $voiture = new Voiture();
 
-        $data = $voiture->findAll();
+        $available = $voiture->where('state', 1);
+        $unavailable = $voiture->where('state', 0);
+
+        $data['available'] = $available;
+        $data['unavailable'] = $unavailable;
 
         $this->view('voitures', 
         [
@@ -33,24 +37,28 @@ class Voitures extends controller{
             $voiture = new Voiture();
 
             # check if matricule already existe
+            $matricule  = $_POST['matricule'];
+            if($voiture->where("matricule", $matricule)){
 
-            #extracting image
-            if(count($_FILES)){
-                
-                $_POST['image_voiture'] = extract_image($_FILES['image_voiture']);
-            }
-
-            if($voiture->validate($_POST)){
-
-                $_POST['date_added'] = date("Y-m-d");
-
-                print_r($_POST);
-
-                $voiture->insert($_POST);
-
+                $errors['car_existe'] = "La voiture existe déjà, essayez de changer matricule !";
             }else{
-                $errors = $voiture->errors;
-            }
+
+                #extracting image
+                if(count($_FILES)){
+                    
+                    $_POST['image_voiture'] = extract_image($_FILES['image_voiture']);
+                }
+
+                if($voiture->validate($_POST)){
+
+                    $_POST['date_added'] = date("Y-m-d");
+
+                    $voiture->insert($_POST);
+
+                }else{
+                    $errors = $voiture->errors;
+                }
+            }  
         }
 
         $this->view('voitures.add', [
@@ -82,7 +90,7 @@ class Voitures extends controller{
     
                     $_POST['date_added'] = date("Y-m-d");
     
-                    $voiture->update($carId, $_POST);
+                    //$voiture->update($carId, $_POST);
     
                     $this->redirect("voitures");
                 }else{

@@ -24,8 +24,8 @@ class Voiture extends Model{
         $date = date("Y-m-d");
 
         # validate matricule
-        if(empty($data['matricule'])){
-            $this->errors['mareicule'] = "Matricule du voiture est vide !";
+        if(empty($data['matricule']) || preg_match('/\//', $data['matricule'])){
+            $this->errors['matricule'] = "Matricule du voiture est invalide !";
         }
 
         # validate marque
@@ -39,18 +39,18 @@ class Voiture extends Model{
         }
 
         #validate date_assurance
-        if(empty($data['date_assurance']) || $data['date_assurance'] < $date ){
+        if(empty($data['date_assurance']) || $data['date_assurance'] > $date ){
             $this->errors['date_assurance'] = "Date d'assurance du voiture est invalide !";
         }
 
         #validate date_viniete
-        if(empty($data['date_viniete']) || $data['date_viniete'] < $date ){
+        if(empty($data['date_viniete']) || $data['date_viniete'] > $date ){
             $this->errors['date_viniete'] = "Date de viniete du voiture est invalide !";
         }
 
         # validate dernire_km
-        if(empty($data['dernire_km'])){
-            $this->errors['dernire_km'] = "Dernier kilometrage du voiture est invalide !";
+        if (empty($data['dernier_km'])) {
+            $this->errors['dernier_km'] = "Dernirer kilometrage du voiture est invalide !";
         }
 
         if (count($this->errors) > 0) {

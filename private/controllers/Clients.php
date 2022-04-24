@@ -36,7 +36,7 @@ class Clients extends controller{
 
                 if($client->validate($_POST)){
 
-                    $client->update($clientId, $_POST);
+                    //$client->update($clientId, $_POST);
 
 
                 }else{

@@ -15,16 +15,46 @@ class Locations extends controller{
 
         $this->view('locations', 
         [
-            'data' => $data,
+            'rows' => $data,
         ]);
     }
 
-    public function add($carId)
+    public function details($locationId = '')
+    {
+
+        $data['id_location'] = $locationId;
+
+        $this->view('locations.details', 
+        [
+            'rows' => $data,
+        ]);
+    }
+
+    public function add($carId = '')
     {
         if(!auth::logged_in()) {
             
             $this->redirect('login');
         }
+
+        if ($carId == '') {
+            
+            $this->redirect('voitures');
+        }
+
+        $voiture = new Voiture();
+        # check car state
+        $query = 'select * from voitures where matricule=:matricule && state=0';
+        $carState = $voiture->query($query, ['matricule'=>$carId]);
+
+        if($carState){
+
+            $this->redirect('voitures');
+        }
+
+        $data = $voiture->where("matricule", $carId);
+
+        $data = $data[0];
 
         $errors = array();
 
@@ -32,9 +62,8 @@ class Locations extends controller{
             
             if(count($_POST) > 0){
 
-                $location = new Location();
-                $client  = new Client();
-
+                $_POST['matricule'] = $carId;
+               
                 #extracting images
                 if(count($_FILES) > 0){
 
@@ -43,44 +72,63 @@ class Locations extends controller{
                 }
 
                 # check if user already existe
-                $query = "select * from clients where nom = :nom && prenom = :prenom && cin_img = :cin_img && permis_img = :permis_img && client_phone = :client_phone";
-                $check_client = $client->query($query, $_POST);
+                $client  = new Client();
+                $query = "select * from clients where nom = :nom && prenom = :prenom && cin = :cin";
 
-                if(!$check_client){
+                $arr['nom'] = $_POST['nom'];
+                $arr['prenom'] = $_POST['prenom'];
+                $arr['cin'] = $_POST['cin'];
+                
+
+                $check_client = $client->query($query, $arr);
+
+                if($check_client){
+
+                    // if client existe get his id
+                    $_POST['id_client'] = $check_client[0]->id_client;
+                }else{
+                                
+                    $_POST['date_added'] = date("Y-m-d");
 
                     if($client->validate($_POST)){
 
-                        $_POST['date_added'] = date("Y-m-d");
+                        // if not existe inset new client and get hin id
                         $client->insert($_POST);
 
-                        $get_id_client = $client->query($query, $_POST);
-                        $_POST['id_client'] = $get_id_client['id_client'];
-
+                        $get_id_client = $client->query($query, $arr);
+                        $_POST['id_client'] = $get_id_client[0]->id_client;
                     }else{
                         $errors = $client->errors;
                     }
-                }else{
-                    
-                    $_POST['id_client'] = $check_client['id_client'];
                 }
 
+                $location = new Location();
                 if($location->validate($_POST)){
 
                     $_POST['date_location'] = date("Y-m-d H:i:s");
                     $_POST['duree_location'] = date_duration($_POST['date_depart'], $_POST['date_retour']);
+                    
 
+                    # change car state from 0 to 1
                     $location->insert($_POST);
+
+                    $voiture->update('matricule',$carId, ['state'=>'0']);
+                    
 
                     $this->redirect("locations");
                 }else{
                     $errors = $location->errors;
                 }
+                
+                
+                
             }
         }else{
             $this->redirect("voitures");
         }
 
         $this->view('locations.add', [
+            "voiture" => $data,
             "errors" => $errors,
         ]);
     }
@@ -105,7 +153,7 @@ class Locations extends controller{
                     $_POST['date_location'] = date("Y-m-d H:i:s");
                     $_POST['duree_location'] = date_duration($_POST['date_depart'], $_POST['date_retour']);
 
-                    $location->update($locationId, $_POST);
+                    $location->update('id_location',$locationId, $_POST);
 
                     // back to previous page
                     $this->redirect("locations");
