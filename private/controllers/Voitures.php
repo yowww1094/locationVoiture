@@ -15,7 +15,7 @@ class Voitures extends controller{
 
         $this->view('voitures', 
         [
-            'data' => $data,
+            'rows' => $data,
         ]);
     }
 
@@ -32,6 +32,8 @@ class Voitures extends controller{
 
             $voiture = new Voiture();
 
+            # check if matricule already existe
+
             #extracting image
             if(count($_FILES)){
                 
@@ -42,9 +44,10 @@ class Voitures extends controller{
 
                 $_POST['date_added'] = date("Y-m-d");
 
+                print_r($_POST);
+
                 $voiture->insert($_POST);
 
-                $this->redirect("voitures");
             }else{
                 $errors = $voiture->errors;
             }

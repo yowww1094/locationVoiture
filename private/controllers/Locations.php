@@ -13,7 +13,7 @@ class Locations extends controller{
 
         $data = $location->findAll();
 
-        $this->view('location', 
+        $this->view('locations', 
         [
             'data' => $data,
         ]);
@@ -80,7 +80,7 @@ class Locations extends controller{
             $this->redirect("voitures");
         }
 
-        $this->view('location.add', [
+        $this->view('locations.add', [
             "errors" => $errors,
         ]);
     }

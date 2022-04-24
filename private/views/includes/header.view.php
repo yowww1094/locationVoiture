@@ -4,12 +4,21 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
+
+        <title>Location de voitures</title>
 
         <link rel="stylesheet" href="<?=ASSETS?>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?=ASSETS?>/css/black-dashboard.css"/>
         <link rel="stylesheet" href="<?=ASSETS?>/css/all.min.css">
+
+
     </head>
     <body>
-        <div>
 
-        
+    <style>
+        body{
+            min-width: 450px;
+        }
+    </style>
+
+

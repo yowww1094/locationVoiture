@@ -13,7 +13,7 @@ class Entretiens extends controller{
 
         $data = $entretien->findAll();
 
-        $this->view('voitures', 
+        $this->view('entretiens', 
         [
             'data' => $data,
         ]);

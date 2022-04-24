@@ -1,9 +1,13 @@
 <?php $this->view('includes/header'); ?>
-            
-        <div class="container">
+<?php $this->view('includes/side-bar'); ?>
+<?php $this->view('includes/nav-bar'); ?>
+        
+        <div class="content">
 
-            <h1>Locations add page!</h1>
+        <h3>locations add</h3>
+            
 
         </div>
 
 <?php $this->view('includes/footer'); ?>
+
