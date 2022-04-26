@@ -7,7 +7,18 @@
 <div class="content">
         <div class="row">
                 <div class="col-md-8">
-                        <form method="post">
+
+                <?php if(count($errors) > 0): ?>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Error!</strong>
+                                <?php foreach($errors as $error): ?>
+                                        <br><?=$error?>
+                                <?php endforeach; ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                <?php endif;?>
+
+                <form method="post">
                         <div class="card">
                                 <div class="card-header">
                                         <h5 class="title">Informations du client:</h5>

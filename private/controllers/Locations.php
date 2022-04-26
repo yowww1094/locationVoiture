@@ -92,7 +92,7 @@ class Locations extends controller{
 
                     if($client->validate($_POST)){
 
-                        // if not existe inset new client and get hin id
+                        // if not existe insert new client and get client id
                         $client->insert($_POST);
 
                         $get_id_client = $client->query($query, $arr);

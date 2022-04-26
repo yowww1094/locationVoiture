@@ -18,7 +18,6 @@
                 <?php if(isset($rows['available']) && $rows['available']): ?>
                     <?php foreach($rows['available'] as $row['available']): ?>
                         
-
                         <div class="col-md-4">
                             <div class="card card-user">
                                 <div class="card-body">
@@ -32,8 +31,9 @@
                                                     <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
                                                 <?php endif; ?>
 
+                                                <h4 class="title"><?=$row['available']->matricule?></h4>
                                                 <h5 class="title"><?=ucfirst($row['available']->marque)?> <?=$row['available']->model?></h5>
-                                            </a>
+                                                <h5 class="text-center">Voiture ajoutee le: <?=$row['available']->date_added?></h5>                                            </a>
                                         </div>
                                     </p>
                                     <div class="card-description">
@@ -43,10 +43,10 @@
                                 </div>
                                 <div class="card-footer justify-content-center">
                                     <div class="button-container">
-                                        <a href="<?=ROOT?>/voitures/details/<?=$row['available']->matricule?>">
+                                        <a href="<?=ROOT?>/voitures/details/<?=$row['available']->matricule?>/">
                                             <button class="btn btn-sm btn-primary">Detailles..</button>
                                         </a>
-                                        <a href="<?=ROOT?>/locations/add/<?=$row['available']->matricule?>">
+                                        <a href="<?=ROOT?>/locations/add/<?=$row['available']->matricule?>/">
                                             <button class="btn btn-sm btn-primary">Faire location</button>
                                         </a>
                                     </div>
@@ -82,7 +82,9 @@
                                                     <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
                                                 <?php endif; ?>
 
+                                                <h4 class="title"><?=$row['unavailable']->matricule?></h4>
                                                 <h5 class="title"><?=ucfirst($row['unavailable']->marque)?> <?=$row['unavailable']->model?></h5>
+                                                <h5 class="text-center">Voiture ajoutee le: <?=$row['unavailable']->date_added?></h5>
                                             </a>
                                         </div>
                                     </p>

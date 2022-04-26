@@ -47,6 +47,22 @@ class Model extends database{
         return $data;
     }
 
+    public function orderBy($column, $order = 'ASC'){
+        $query = "select * from $this->table order by $column $order";
+
+        $data = $this->query($query);
+
+        // run functions after select
+        if(property_exists($this, 'afterSelect')){
+            foreach ($this->afterSelect as $func) {
+                # code...
+                $data  = $this->$func($data);
+            }
+        }
+
+        return $data;
+    }
+
     public function insert($data){
 
         // remove unwanted columns

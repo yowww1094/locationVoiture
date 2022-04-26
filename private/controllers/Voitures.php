@@ -23,6 +23,33 @@ class Voitures extends controller{
         ]);
     }
 
+    public function details($carId = '')
+    {
+
+        if(!auth::logged_in()) {
+            
+            $this->redirect('login');
+        }
+
+        if($carId == ''){
+
+            $this->redirect('voitures');
+        }
+
+        $voiture = new Voiture();
+        $car = $voiture->where('matricule', $carId);
+
+        if($car){
+
+            $data = $car[0];
+        }
+
+        $this->view('voitures.details', 
+        [
+            'rows' => $data,
+        ]);
+    }
+
     public function add()
     {
         if(!auth::logged_in()) {
@@ -66,7 +93,7 @@ class Voitures extends controller{
         ]);
     }
 
-    public function edit($carId)
+    public function edit($carId = '')
     {
         if(!auth::logged_in()) {
             
@@ -74,32 +101,41 @@ class Voitures extends controller{
         }
 
         $errors = array();
-        if(isset($carId)){
+        if($carId == ''){
 
-            if(count($_POST) > 0){
+            $this->redirect('voitures');
+        }
 
-                $voiture = new Voiture();
-    
-                #extracting image
-                if(count($_FILES)){
-                    
-                    $_POST['image_voiture'] = extract_image($_FILES['image_voiture']);
-                }
-    
-                if($voiture->validate($_POST)){
-    
-                    $_POST['date_added'] = date("Y-m-d");
-    
-                    //$voiture->update($carId, $_POST);
-    
-                    $this->redirect("voitures");
-                }else{
-                    $errors = $voiture->errors;
-                }
+        $voiture = new Voiture();
+        $car = $voiture->where('matricule', $carId);
+
+        if($car){
+
+            $data = $car[0];
+        }
+
+        if(count($_POST) > 0){
+
+            #extracting image
+            if(count($_FILES)){
+                
+                $_POST['image_voiture'] = extract_image($_FILES['image_voiture']);
+            }
+
+            if($voiture->validate($_POST)){
+
+                $_POST['date_added'] = date("Y-m-d");
+
+                //$voiture->update($carId, $_POST);
+
+                $this->redirect("voitures");
+            }else{
+                $errors = $voiture->errors;
             }
         }
 
         $this->view('voitures.edit', [
+            "rows" => $data,
             "errors" => $errors,
         ]);
     }

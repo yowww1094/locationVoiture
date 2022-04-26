@@ -16,6 +16,10 @@ class Voiture extends Model{
 
     protected $beforeInsert = [];
 
+    protected $afterSelect = [
+        'get_entretien',
+    ];
+
     public function validate($data)
     {
         # code...
@@ -58,5 +62,20 @@ class Voiture extends Model{
         }
 
         return true;
+    }
+
+    public function get_entretien($data)
+    {
+
+        $entretien = new Entretien();
+        if(is_array($data)){
+            foreach($data as $key => $row){
+
+                $result = $entretien->where('matricule', $row->matricule);
+                $data[$key]->entretien = is_array($result) ? $result : false;
+            }
+        }
+        
+        return $data;
     }
 }

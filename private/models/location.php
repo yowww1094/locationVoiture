@@ -50,11 +50,11 @@ class Location extends Model{
 
     public function get_voiture($data)
     {
-        $user = new Voiture();
+        $voiture = new Voiture();
         if(is_array($data)){
             foreach($data as $key => $row){
 
-                $result = $user->where('matricule', $row->matricule);
+                $result = $voiture->where('matricule', $row->matricule);
                 $data[$key]->voiture = is_array($result) ? $result[0] : false;
             }
         }

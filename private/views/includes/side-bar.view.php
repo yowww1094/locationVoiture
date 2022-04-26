@@ -28,12 +28,6 @@
                         </a>
                     </li>
                     <li>
-                        <a href="<?=ROOT?>/entretiens/">
-                            <i class="fas fa-wrench"></i>
-                            <p>Entretiens</p>
-                        </a>
-                    </li>
-                    <li>
                         <a href="<?=ROOT?>/clients/">
                             <i class="fas fa-user-friends"></i>
                             <p>Clients</p>

@@ -2,24 +2,7 @@
 
 class Entretiens extends controller{
 
-    public function index()
-    {
-        if(!auth::logged_in()) {
-            
-            $this->redirect('login');
-        }
-
-        $entretien = new Entretien();
-
-        $data = $entretien->findAll();
-
-        $this->view('entretiens', 
-        [
-            'data' => $data,
-        ]);
-    }
-
-    public function add($carId)
+    public function add($carId = '')
     {
         if(!auth::logged_in()) {
             
@@ -28,28 +11,37 @@ class Entretiens extends controller{
 
         $errors = array();
 
-        if(isset($carId)){
-
-            if(count($_POST) > 0){
-
-                $entretien = new Entretien();
-
-                if($entretien->validate($_POST)){
-
-                    $entretien->insert($_POST);
-
-                    $this->redirect("entretiens");
-                }else{
-
-                    $errors = $entretien->errors;
-                }
-            }
-        }else{
-
-            $this->redirect("voitures");
+        if($carId == ''){
+             
+            $this->redirect('voitures');
         }
 
-        $this->view('entretien.add', [
+        $voiture = new Voiture();
+        $car = $voiture->where('matricule', $carId);
+
+        if($car){
+
+            $data = $car[0];
+        }
+
+
+        if(count($_POST) > 0){
+
+            $entretien = new Entretien();
+
+            if($entretien->validate($_POST)){
+
+                $entretien->insert($_POST);
+
+            }else{
+
+                $errors = $entretien->errors;
+            }
+        }
+        
+
+        $this->view('entretiens.add', [
+            "rows" => $data,
             "errors" => $errors,
         ]);
     }

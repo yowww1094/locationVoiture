@@ -21,6 +21,15 @@ function get_select($key, $value){
     return "";
 }
 
+function get_img($key){
+    if(isset($_POST[$key])){
+        
+        return $_POST[$key];
+    }
+
+    return "";
+}
+
 function esc($var){
     return htmlspecialchars($var);
 }

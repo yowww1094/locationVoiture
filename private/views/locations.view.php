@@ -62,8 +62,6 @@
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
-
-                                <?php echo '<pre>'; print_r($rows)?>
                             </div>
                         </div>
                     </div>
