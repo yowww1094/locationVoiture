@@ -66,3 +66,13 @@ function get_date($date){
     
     return $date;
 }
+
+function show($data){
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>'; 
+}
+
+function fix_length($string){
+    return $string;
+}

@@ -13,7 +13,9 @@ class database{
         return $con;
     }
 
-    public function query($query, $data = array()){
+    public function query($query, $data = array())
+    {
+
         $stmt = $this->connect()->prepare($query);
 
         if($stmt){
@@ -24,6 +26,15 @@ class database{
         }
 
         if(is_array($data) && count($data) > 0){
+
+             // run functions after select
+            if(property_exists($this, 'afterSelect')){
+                foreach ($this->afterSelect as $func) {
+                    # code...
+                    $data  = $this->$func($data);
+                }
+            }
+            
             return $data;
         }
 

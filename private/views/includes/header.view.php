@@ -11,6 +11,8 @@
         <link rel="stylesheet" href="<?=ASSETS?>/css/black-dashboard.css"/>
         <link rel="stylesheet" href="<?=ASSETS?>/css/all.min.css">
 
+        <script src="https://kit.fontawesome.com/fa16039f75.js" crossorigin="anonymous"></script>
+
 
     </head>
     <body>

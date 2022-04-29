@@ -58,10 +58,11 @@ class Voitures extends controller{
         }
 
         $errors = array();
+        $voiture = new Voiture();
+
+        
 
         if(count($_POST) > 0){
-
-            $voiture = new Voiture();
 
             # check if matricule already existe
             $matricule  = $_POST['matricule'];
@@ -85,8 +86,19 @@ class Voitures extends controller{
                 }else{
                     $errors = $voiture->errors;
                 }
-            }  
+            }
+
+            // get car id and set notifications
+            $car_id = $voiture->where("matricule", $matricule);
+            if($car_id){
+                $car_id = $car_id[0]->matricule;
+            }
+
+            (new Voiture_notification())->set_voiture_notif($car_id, $_POST);
+
         }
+
+        
 
         $this->view('voitures.add', [
             "errors" => $errors,
@@ -132,6 +144,9 @@ class Voitures extends controller{
             }else{
                 $errors = $voiture->errors;
             }
+
+            // set notifications
+
         }
 
         $this->view('voitures.edit', [

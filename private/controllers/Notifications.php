@@ -9,15 +9,18 @@ class Notifications extends controller{
             $this->redirect('login');
         }
 
-        $notificationsVoiture = new Notificationsvoitures();
-        $notificationsLocation = new Notificationslocations();
+        $notificationsVoiture = new Voiture_notification();
+        $notificationsLocation = new Location_notification();
 
-        $data['notificationsVoiture'] = $notificationsVoiture->findAll();
-        $data['notificationsLocation'] = $notificationsLocation->findAll();
+        $voitureQuery = 'select * from voiture_notifications where state = :state order by date_notification DESC';
+        $locationQuery = 'select * from location_notifications where state = :state order by date_notification DESC';
 
+        $data['notificationsVoiture'] = $notificationsVoiture->query($voitureQuery, ['state' => '1']);
+        $data['notificationsLocation'] = $notificationsLocation->query($locationQuery, ['state' => '1']);
 
         $this->view('notifications',[
             'rows' => $data,
         ]);
+        
     }
 }

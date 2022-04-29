@@ -120,7 +120,15 @@ class Locations extends controller{
                     $errors = $location->errors;
                 }
                 
+                // get location id and set notifications
+                $query_location = 'select * from locations where id_client=:id_client && matricule=:matricule && date_location=:date_location && date_depart=:date_depart && date_retour=:date_retour && duree_location=:duree_location && prix=:prix';
                 
+                $location_id = $location->query($query_location, $_POST);
+                if($location_id){
+                    $location_id = $location_id[0]->id_location;
+                }
+
+                (new Location_notification())->set_location_notif($location_id, $_POST);
                 
             }
         }else{
