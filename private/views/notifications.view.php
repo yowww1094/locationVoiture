@@ -101,7 +101,7 @@
                                             <div class="alert alert-info alert-with-icon" data-notify="container">
                                                 <div class="float-right">
                                                     <a href="<?=ROOT?>/locations/details/<?=$row->id_location?>/">
-                                                        <button type="button"  class="btn btn-sm btn-primary" >Confirmer</button>
+                                                        <button type="button"  class="btn btn-sm btn-primary" >Voir en details</button>
                                                     </a>
                                                 </div>
 

@@ -10,16 +10,50 @@ class Voitures extends controller{
         }
 
         $voiture = new Voiture();
+        $data = array();
+        $searchResults = array();
+        $errors = array();
 
-        $available = $voiture->where('state', 1);
-        $unavailable = $voiture->where('state', 0);
+        if(count($_POST) > 0){
+            if($voiture->searchValidate($_POST)){
 
-        $data['available'] = $available;
-        $data['unavailable'] = $unavailable;
+                $matricule = (empty($_POST['matricule'])) ? "" : "%".$_POST['matricule']."%";
+                $marque = (empty($_POST['marque'])) ? "" : "%".$_POST['marque']."%";
+                $model = (empty($_POST['model'])) ? "" : "%".$_POST['model']."%";
+                $date_assurance_depuis = (empty($_POST['date_assurance_depuis'])) ? "" : $_POST['date_assurance_depuis'];
+                $date_assurance_jusqua = (empty($_POST['date_assurance_jusqua'])) ? "" : $_POST['date_assurance_jusqua'];
+                $date_viniete_depuis = (empty($_POST['date_viniete_depuis'])) ? "" : $_POST['date_viniete_depuis'];
+                $date_viniete_jusqua = (empty($_POST['date_viniete_jusqua'])) ? "" : $_POST['date_viniete_jusqua'];
+                $state = (empty($_POST['state'])) ? "" : ($_POST['state'] == ('disponible') ? '1' : '0') ;
 
-        $this->view('voitures', 
-        [
+                $stateCol = 'state';
+
+
+                $searchQuery = "SELECT * FROM voitures 
+                                    WHERE matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
+                                           OR date_assurance BETWEEN '$date_assurance_depuis' AND '$date_assurance_jusqua'
+                                           OR date_viniete BETWEEN '$date_viniete_depuis' AND '$date_viniete_jusqua'
+                                           OR $stateCol LIKE '$state'";
+                                           
+
+                $searchResults = $voiture->query($searchQuery);
+            }else{
+
+                $errors = $voiture->errors;
+                $data = $voiture->orderBy('state', 'DESC');
+            }
+            
+        }else{
+
+            $data = $voiture->orderBy('state');
+        }
+
+       
+
+        $this->view('voitures', [
             'rows' => $data,
+            "searchResults" => $searchResults,
+            "errors" => $errors,
         ]);
     }
 
@@ -40,7 +74,6 @@ class Voitures extends controller{
         $car = $voiture->where('matricule', $carId);
 
         if($car){
-
             $data = $car[0];
         }
 
@@ -68,7 +101,7 @@ class Voitures extends controller{
             $matricule  = $_POST['matricule'];
             if($voiture->where("matricule", $matricule)){
 
-                $errors['car_existe'] = "La voiture existe déjà, essayez de changer matricule !";
+                $errors['car_existe'] = "La voiture déjà existe, essayez de changer matricule !";
             }else{
 
                 #extracting image
@@ -97,8 +130,6 @@ class Voitures extends controller{
             (new Voiture_notification())->set_voiture_notif($car_id, $_POST);
 
         }
-
-        
 
         $this->view('voitures.add', [
             "errors" => $errors,
@@ -138,14 +169,16 @@ class Voitures extends controller{
 
                 $_POST['date_added'] = date("Y-m-d");
 
-                //$voiture->update($carId, $_POST);
+                $voiture->update('matricule', $carId, $_POST);
+                
+                // update notifications
+                (new Voiture_notification())->update_voiture_notif($carId, $_POST);
 
                 $this->redirect("voitures");
+
             }else{
                 $errors = $voiture->errors;
             }
-
-            // set notifications
 
         }
 

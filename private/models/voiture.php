@@ -43,12 +43,12 @@ class Voiture extends Model{
         }
 
         #validate date_assurance
-        if(empty($data['date_assurance']) || $data['date_assurance'] > $date ){
+        if(empty($data['date_assurance'])){
             $this->errors['date_assurance'] = "Date d'assurance du voiture est invalide !";
         }
 
         #validate date_viniete
-        if(empty($data['date_viniete']) || $data['date_viniete'] > $date ){
+        if(empty($data['date_viniete'])){
             $this->errors['date_viniete'] = "Date de viniete du voiture est invalide !";
         }
 
@@ -58,6 +58,26 @@ class Voiture extends Model{
         }
 
         if (count($this->errors) > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function searchValidate($data)
+    {
+        # code...
+        $this->errors = array();
+
+        if(empty($data['marque']) && empty($data['model']) && empty($data['matricule']) && empty($data['date_assurance_depuis']) 
+            && empty($data['date_assurance_jusqua']) && empty($data['date_viniete_depuis']) && empty($data['date_viniete_jusqua']) && !in_array($data['state'],['disponible','location']))
+        {
+
+            $this->errors['error'] = "Vous devez remplir les champs pour rechercher!";
+        }       
+
+        if (count($this->errors) > 0) {
+            
             return false;
         }
 

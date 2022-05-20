@@ -9,6 +9,14 @@ class Home extends controller{
             $this->redirect('login');
         }
 
-        $this->view('home');
+        $notificationsVoiture = new Voiture_notification();
+        $locations = new Location();
+
+        $data['notificationsVoiture'] = $notificationsVoiture->findAll();
+        $data['location'] = $locations->findAll();
+
+        $this->view('home',[
+            'data' => $data,
+        ]);
     }
 }

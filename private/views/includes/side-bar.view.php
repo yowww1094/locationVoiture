@@ -22,6 +22,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="<?=ROOT?>/entretiens/">
+                            <i class="fa-solid fa-gears"></i>
+                            <p>Entretiens</p>
+                        </a>
+                    </li>
+                    <li>
                         <a href="<?=ROOT?>/locations/">
                             <i class="fas fa-file-contract"></i>
                             <p>Locations</p>

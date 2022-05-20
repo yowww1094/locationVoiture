@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div class="col-md-6 px-md-1">
                                     <label>Numero de telephone</label>
-                                    <input type="text" class="form-control text-white" value="<?=$rows->client_phone?>" name="dernier_km">
+                                    <input type="text" class="form-control text-white" value="<?=$rows->client_phone?>" name="client_phone">
                                 </div>
                             </div>
 

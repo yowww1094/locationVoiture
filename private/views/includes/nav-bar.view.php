@@ -1,21 +1,21 @@
 <?php
 
-    $notificationsVoiture = new Voiture_notification();
-    $notificationsLocation = new Location_notification();
+$dateNow = date("Y-m-d");
 
-    $notification_voiture = $notificationsVoiture->get_voiture_notif_count();
-    $notification_location = $notificationsLocation->get_location_notif_count();
+$notificationsVoiture = new Voiture_notification();
+$notificationsLocation = new Location_notification();
 
-    $notification_count = $notification_voiture + $notification_location;
+$notification_voiture = $notificationsVoiture->get_voiture_notif_count();
+$notification_location = $notificationsLocation->get_location_notif_count();
 
-    $voitureQuery = 'select * from voiture_notifications where state = :state order by date_notification DESC';
-    $locationQuery = 'select * from location_notifications where state = :state order by date_notification DESC';
+$notification_count = $notification_voiture + $notification_location;
 
-    $rows['notificationsVoiture'] = $notificationsVoiture->query($voitureQuery, ['state' => '1']);
-    $rows['notificationsLocation'] = $notificationsLocation->query($locationQuery, ['state' => '1']);
+$voitureQuery = 'select * from voiture_notifications where state = :state && date_notification = :dateNow order by date_notification DESC';
+$locationQuery = 'select * from location_notifications where state = :state && date_notification = :dateNow order by date_notification DESC';
 
-?>
-        
+$rows['notificationsVoiture'] = $notificationsVoiture->query($voitureQuery, ['state' => '1', 'dateNow' => $dateNow]);
+$rows['notificationsLocation'] = $notificationsLocation->query($locationQuery, ['state' => '1', 'dateNow' => $dateNow]);
+?>   
     <div class="main-panel">
 
         <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
@@ -51,60 +51,61 @@
 
                             <ul class="dropdown-menu dropdown-menu-right dropdown-navbar" style="min-width: 300px;">
 
-                                <?php if(isset($rows) && $rows): ?>
-                                    <?php if($rows['notificationsVoiture']): ?>
+                                <?php if(is_array($rows) && $rows): ?>
+                                    <?php if($rows['notificationsVoiture'] && $rows['notificationsLocation']): ?>
+                                        <?php if($rows['notificationsVoiture']): ?>
 
-                                        <?php foreach(array_slice($rows['notificationsVoiture'], 0, 2) as $row): ?>
+                                            <?php foreach(array_slice($rows['notificationsVoiture'], 0, 2) as $row): ?>
 
-                                            <li class="nav-item">
-                                                <p class="dropdown-item text-dark">
-                                                    <b><?=strtoupper($row->type_notification)?> VOITURE -</b>
-                                                    <br>
-                                                    Matricule: <?=$row->matricule?> - Date: <?=$row->next_date?>
-                                                </p>
-                                            </li>
-                                            <li class="dropdown-divider"></li>
+                                                <li class="nav-item">
+                                                    <p class="dropdown-item text-dark">
+                                                        <b><?=strtoupper($row->type_notification)?> VOITURE -</b>
+                                                        <br>
+                                                        Matricule: <?=$row->matricule?> - Date: <?=$row->next_date?>
+                                                    </p>
+                                                </li>
+                                                <li class="dropdown-divider"></li>
 
-                                        <?php endforeach; ?>
-                                    
-                                    <?php endif; ?>
-                                    <?php if($rows['notificationsLocation']): ?>
-                                        <?php foreach(array_slice($rows['notificationsLocation'], 0, 2) as $row): ?>
+                                            <?php endforeach; ?>
+                                        
+                                        <?php endif; ?>
+                                        <?php if($rows['notificationsLocation']): ?>
+                                            <?php foreach(array_slice($rows['notificationsLocation'], 0, 2) as $row): ?>
 
-                                            <li class="nav-item">
-                                                <p class="dropdown-item  text-dark">
-                                                    <b><?=strtoupper($row->type_notification)?> -</b>
-                                                    <br>
-                                                    Client: <?=$row->location->client->prenom?> <?=$row->location->client->prenom?> - 
-                                                    Voiture: <?=strtoupper($row->location->voiture->matricule)?>
-                                                </p>
-                                            </li>
-                                            <li class="dropdown-divider"></li>
+                                                <li class="nav-item">
+                                                    <p class="dropdown-item  text-dark">
+                                                        <b><?=strtoupper($row->type_notification)?> -</b>
+                                                        <br>
+                                                        Client: <?=$row->location->client->prenom?> <?=$row->location->client->prenom?> - 
+                                                        Voiture: <?=strtoupper($row->location->voiture->matricule)?>
+                                                    </p>
+                                                </li>
+                                                <li class="dropdown-divider"></li>
 
-                                        <?php endforeach; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    <?php else:?>
+                                        <p class="text-dark text-center">Pas de notifications a ce momment</p>
                                     <?php endif; ?>
                                 <?php endif; ?>
-                                
+
                                 <li class="nav-link"><a href="<?=ROOT?>/notifications/" class="nav-item dropdown-item text-center">Voir tous!</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown nav-item">
-                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                <i class="fa fa-user"></i>
-                                <b class="caret d-none d-lg-block d-xl-block"></b>
-                                <p class="d-lg-none">
-                                    Log out
-                                </p>
-                            </a>
-                            <ul class="dropdown-menu dropdown-navbar">
-                                <li class="nav-link"><a href="#" class="nav-item dropdown-item">Settings</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li class="nav-link"><a href="<?=ROOT?>/logout" class="nav-item dropdown-item">Log out</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a href="<?=ROOT?>/logout" class="nav-link" title="LOGOUT"><i class="fa-solid fa-power-off"></i></a>
                         </li>
+
+                        <?php if($_SESSION['USER']->rank == 'admin'): ?>
+
+                            <li class="nav-item">
+                                <a href="<?=ROOT?>/signup" class="nav-link" title="ADD NEW USER"><i class="fa-solid fa-person-walking-arrow-right"></i></i></a>
+                            </li>
+
+                        <?php endif; ?>
+
                         <li class="separator d-lg-none"></li>
                     </ul>
                 </div>
             </div>
         </nav>
-

@@ -3,7 +3,7 @@
 class Entretien extends Model{
 
     protected $allowedColumns = [
-        'voiture',
+        'matricule',
         'type_entretien',
         'date_entretien',
         'description',
@@ -42,6 +42,27 @@ class Entretien extends Model{
 
 
         if (count($this->errors) > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function searchValidate($data)
+    {
+        # code...
+        $this->errors = array();
+
+        $type_entretien = ['mechanic', 'videnge'];
+        if(empty($data['marque']) && empty($data['model']) && empty($data['matricule']) && !in_array($data['type_entretien'], $type_entretien)
+             && empty($data['dateMin']) &&empty($data['dateMax']) &&empty($data['prixMin']) &&empty($data['prixMax']))
+        {
+
+            $this->errors['error'] = "Vous devez remplir les champs pour rechercher!";
+        }       
+
+        if (count($this->errors) > 0) {
+            
             return false;
         }
 

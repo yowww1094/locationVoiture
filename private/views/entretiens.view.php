@@ -8,7 +8,7 @@
                 <div class="card ">
                     
                     <div class="card-header">
-                        <h2 class="text-center mt-3">Tout les clients!</h2>
+                        <h2 class="text-center mt-3">Tout les entretiens!</h2>
                         <hr>
 
                         <div class="row">
@@ -27,7 +27,7 @@
                                 <button class="ml-1 btn  btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                     Recherche Avancee
                                 </button>
-                                <a href="<?=ROOT?>/clients/">
+                                <a href="<?=ROOT?>/entretiens/">
                                     <button class="btn btn-primary">Afficher tous</button>
                                 </a>
                                 <div class="collapse" id="collapseExample">
@@ -35,22 +35,49 @@
                                         <form method="POST">
                                             <div class="row">
                                                 <div class="col">
-                                                    <label>Prenom Client</label>
-                                                    <input type="text" class="form-control" value="<?=get_var('prenom')?>" name="prenom">
+                                                    <label>Marque</label>
+                                                    <input type="text" class="form-control" value="<?=get_var('marque')?>" name="marque">
                                                 </div>
                                                 <div class="col">
-                                                    <label>Nom Client</label>
-                                                    <input type="text" class="form-control" value="<?=get_var('nom')?>" name="nom">
+                                                    <label>Model</label>
+                                                    <input type="text" class="form-control" value="<?=get_var('model')?>" name="model">
                                                 </div>
                                                 <div class="col">
-                                                    <label>CIN Client</label>
-                                                    <input type="text" class="form-control" value="<?=get_var('cin')?>" name="cin">
+                                                    <label>Matricule</label>
+                                                    <input type="text" class="form-control" value="<?=get_var('matricule')?>" name="matricule">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-5">
-                                                    <label>Numero telephone client</label>
-                                                    <input type="text" class="form-control" value="<?=get_var('client_phone')?>" name="client_phone">
+                                                    <label>Type d'entretien</label>
+                                                    <select name="type_entretien" class="form-control text-dark">
+                                                        <option <?=get_select('type_entretien', '')?> value="">--Sélectionnez type d'entretien--</option>
+                                                        <option <?=get_select('type_entretien', 'videnge')?> value="videnge">Videnge</option>
+                                                        <option <?=get_select('type_entretien', 'mechanic')?> value="mechanic">Entretien mécanique</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>Date depuis</label>
+                                                    <input type="date" class="form-control" value="<?=get_var('date_depart')?>" name="date_depart">
+                                                </div>
+                                                <div class="col">
+                                                    <label>Date justqu'a</label>
+                                                    <input type="date" class="form-control" value="<?=get_var('date_retour')?>" name="date_retour">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label>Prix</label>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <input type="text" class="form-control" value="<?=get_var('prixMin')?>" name="prixMin" placeholder="Min">
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" class="form-control" value="<?=get_var('prixMax')?>" name="prixMax" placeholder="Max">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <button type="submit" class="btn btn-sm btn-primary float-right"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -67,11 +94,12 @@
                                 <thead class="text-primary">
                                     <tr>
                                         <th>№</th>
-                                        <th>Prenom</th>
-                                        <th>Nom</th>
-                                        <th>CIN</th>
-                                        <th>Numero de telephone</th>
-                                        <th>Date d'inscription</th>
+                                        <th>Voiture</th>
+                                        <th>Type</th>
+                                        <th>Garage</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Prix</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -82,14 +110,15 @@
                                             
                                             <tr>
                                                 <td><?=$num?></td>
-                                                <td><?=$row->prenom?></td>
-                                                <td><?=$row->nom?></td>
-                                                <td><?=$row->cin?></td>
-                                                <td><?=$row->client_phone?></td>
-                                                <td><?=get_date($row->date_added)?></td>
+                                                <td><?=$row->marque?> <?=$row->model?>: <?=$row->matricule?></td>
+                                                <td><?=strtoupper($row->type_entretien)?></td>
+                                                <td>Garage</td>
+                                                <td><?=$row->description?></td>
+                                                <td><?=get_date($row->date_entretien)?></td>
+                                                <td><?=$row->prix_entretien?> DHs</td>
                                                 <td>
-                                                    <a href="<?=ROOT?>/clients/edit/<?=$row->id_client?>/">
-                                                        <button class="btn btn-sm btn-primary">Modifier</button>
+                                                    <a href="<?=ROOT?>/voitures/details/<?=$row->matricule?>/">
+                                                        <button class="btn btn-sm btn-primary"><i class="fa-solid fa-car"></i></button>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -102,14 +131,15 @@
                                             
                                             <tr>
                                                 <td><?=$num?></td>
-                                                <td><?=$row->prenom?></td>
-                                                <td><?=$row->nom?></td>
-                                                <td><?=$row->cin?></td>
-                                                <td><?=$row->client_phone?></td>
-                                                <td><?=get_date($row->date_added)?></td>
+                                                <td><?=$row->marque?> <?=$row->model?>: <?=$row->matricule?></td>
+                                                <td><?=$row->type_entretien?></td>
+                                                <td>Garage</td>
+                                                <td><?=$row->description?></td>
+                                                <td><?=get_date($row->date_entretien)?></td>
+                                                <td><?=$row->prix_entretien?></td>
                                                 <td>
-                                                    <a href="<?=ROOT?>/clients/edit/<?=$row->id_client?>/">
-                                                        <button class="btn btn-sm btn-primary">Modifier</button>
+                                                    <a href="<?=ROOT?>/voitures/details/<?=$row->matricule?>/">
+                                                        <button class="btn btn-sm btn-primary"><i class="fa-solid fa-car"></i></button>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -122,7 +152,7 @@
                                         <?php if(empty($rows)): ?>
 
                                             <tr>
-                                                <td colspan="6"><h2 class="text-center">Pas de clients a ce moment!</h2></td>
+                                                <td colspan="6"><h2 class="text-center">Pas de d'entretiens!</h2></td>
                                             </tr>
 
                                         <?php elseif(empty($searchResults)): ?>
@@ -140,7 +170,7 @@
                 </div>
             </div>
         </div>
-
+<?php show($rows)?>
     </div>
 
 <?php $this->view('includes/footer'); ?>

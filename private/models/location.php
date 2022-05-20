@@ -24,7 +24,7 @@ class Location extends Model{
         # code...
         $this->errors = array();
 
-        $date = date("Y-m-d H:i:s");
+        $date = date("Y-m-d");
 
         #validate date_depart
         if(empty($data['date_depart']) || $data['date_depart'] < $date ){
@@ -42,6 +42,26 @@ class Location extends Model{
         }        
 
         if (count($this->errors) > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function searchValidate($data)
+    {
+        # code...
+        $this->errors = array();
+
+        if(empty($data['marque']) && empty($data['model']) && empty($data['matricule']) && empty($data['nom']) 
+            && empty($data['prenom']) && empty($data['date_depart']) && empty($data['date_retour']) && empty($data['cin']) && empty($data['prixMin']) && empty($data['prixMax']))
+        {
+
+            $this->errors['error'] = "Vous devez remplir les champs pour rechercher!";
+        }       
+
+        if (count($this->errors) > 0) {
+            
             return false;
         }
 

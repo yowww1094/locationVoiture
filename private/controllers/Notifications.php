@@ -12,11 +12,13 @@ class Notifications extends controller{
         $notificationsVoiture = new Voiture_notification();
         $notificationsLocation = new Location_notification();
 
-        $voitureQuery = 'select * from voiture_notifications where state = :state order by date_notification DESC';
-        $locationQuery = 'select * from location_notifications where state = :state order by date_notification DESC';
+        $dateNow = date("Y-m-d");
 
-        $data['notificationsVoiture'] = $notificationsVoiture->query($voitureQuery, ['state' => '1']);
-        $data['notificationsLocation'] = $notificationsLocation->query($locationQuery, ['state' => '1']);
+        $voitureQuery = 'select * from voiture_notifications where state = :state && date_notification = :dateNow order by date_notification DESC';
+        $locationQuery = 'select * from location_notifications where state = :state && date_notification = :dateNow order by date_notification DESC';
+
+        $data['notificationsVoiture'] = $notificationsVoiture->query($voitureQuery, ['state' => '1', 'dateNow' => $dateNow]);
+        $data['notificationsLocation'] = $notificationsLocation->query($locationQuery, ['state' => '1', 'dateNow' => $dateNow]);
 
         $this->view('notifications',[
             'rows' => $data,

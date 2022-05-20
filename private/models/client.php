@@ -19,7 +19,10 @@ class Client extends Model{
         # code...
         $this->errors = array();
 
-        $date = date("Y-m-d H:i:s");
+        # validate cin
+        if(empty($data['cin'])){
+            $this->errors['cin'] = "CIN est vide !";
+        }
 
         # validate firstname
         if(empty($data['prenom']) || preg_match('/[^a-zA-Z]$/', $data['prenom'])){
@@ -29,11 +32,6 @@ class Client extends Model{
         # validate lastname
         if(empty($data['nom']) || preg_match("/[^a-zA-Z]$/", $data['nom'])){
             $this->errors['nom'] = "Seules les lettres sont autorisées dans le nom !";
-        }
-
-        # validate cin
-        if(empty($data['nom'])){
-            $this->errors['nom'] = "CIN est vide !";
         }
 
         # validate cin_img
@@ -46,6 +44,25 @@ class Client extends Model{
         }
 
         if (count($this->errors) > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function searchValidate($data)
+    {
+        # code...
+        $this->errors = array();
+
+        if(empty($data['nom']) && empty($data['prenom']) && empty($data['cin']) && empty($data['client_phone']))
+        {
+
+            $this->errors['error'] = "Vous devez remplir les champs pour rechercher!";
+        }       
+
+        if (count($this->errors) > 0) {
+            
             return false;
         }
 

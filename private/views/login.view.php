@@ -22,11 +22,11 @@
             <form method="POST">
                 <div class="mb-3"> 
                     <label for="exampleInputEmail1" class="form-label text-dark">Email address</label>
-                    <input type="email" class="form-control" name="email" placeholder="E-mail" autofocus>
+                    <input type="email" class="form-control text-dark" name="email" placeholder="E-mail" autofocus>
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label text-dark">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Password">
+                    <input type="password" class="form-control text-dark" name="password" placeholder="Password">
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary text-dark">Login</button>
