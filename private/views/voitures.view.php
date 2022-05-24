@@ -67,16 +67,6 @@
                                                     <input type="date" class="form-control" value="<?=get_var('date_assurance_jusqua')?>" name="date_assurance_jusqua">
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>Date viniete depuis</label>
-                                                    <input type="date" class="form-control" value="<?=get_var('date_viniete_depuis')?>" name="date_viniete_depuis">
-                                                </div>
-                                                <div class="col">
-                                                    <label>Date viniete justqu'a</label>
-                                                    <input type="date" class="form-control" value="<?=get_var('date_viniete_jusqua')?>" name="date_viniete_jusqua">
-                                                </div>
-                                            </div>
                                             <button type="submit" class="btn btn-sm btn-primary float-right"><i class="fa-solid fa-magnifying-glass"></i></button>
                                         </form>
                                     </div>
@@ -126,10 +116,12 @@
                                                     <a href="<?=ROOT?>/voitures/details/<?=$row->matricule?>">
 
                                                         <?php if($row->image_voiture): ?>
-                                                            <img src="<?=$row->image_voiture?>" class="card-img-top">
+
+                                                            <img src="<?=ROOT?>/<?=$row->image_voiture?>" class="card-img-top">
                                                         <?php else: ?>
                                                             <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
                                                         <?php endif; ?>
+                                                        <br>
 
                                                         <h4 class="title"><?=$row->matricule?></h4>
                                                         <h5 class="title"><?=ucfirst($row->marque)?> <?=$row->model?></h5>                                  
@@ -207,6 +199,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 
 <?php $this->view('includes/footer'); ?>

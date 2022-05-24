@@ -5,7 +5,7 @@
         <div class="content">
             <div class="card justrify-content-center">
                 <div class="card-header">
-                    <h3 class="text-center pt-2">Êtes-vous sûr de vouloir supprimer cette location?</h3>
+                    <h3 class="text-center pt-2">Finir location!</h3>
                 </div>
                 <div class="card-body">
                     <form method="post">

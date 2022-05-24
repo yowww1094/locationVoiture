@@ -9,11 +9,9 @@
             <div class="col-md-8">
 
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="title">Informations du voiture:</h5>
-                    </div>
 
                     <div class="card-body p-4">
+                        <h5 class="title">Informations du voiture:</h5>
                         <div class="row">
                             <div class="col-md-5 pl-md-1">
                                 <div class="form-group">
@@ -24,31 +22,53 @@
                             <div class="col-md-3 px-md-1">
                                 <div class="form-group">
                                     <label>Marque</label>
-                                    <input type="text" class="form-control text-white" disabled="" value="<?=$rows->marque?>">
+                                    <input type="text" class="form-control text-white" disabled="" value="<?=strtoupper($rows->marque)?>">
                                 </div>
                             </div>
                             <div class="col-md-4 px-md-1">
                                 <div class="form-group">
                                     <label>Model</label>
-                                    <input type="text" class="form-control text-white" disabled="" value="<?=$rows->model?>">
+                                    <input type="text" class="form-control text-white" disabled="" value="<?=strtoupper($rows->model)?>">
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <h5 class="title">Informations d'assurance:</h5>
                         <div class="row">
                             <div class="col-md-6 px-md-1">
-                                <label>Date d'assurance</label>
-                                <input type="text" class="form-control text-white" disabled="" value="<?=get_date($rows->date_assurance)?>">
+                                <label>Numero d'assurance</label>
+                                <input type="text" class="form-control text-white" disabled="" value="<?=$rows->assurances->numero?>">
                             </div>
                             <div class="col-md-6  px-md-1">
-                                <label>Date de viniete</label>
-                                <input  type="text" class="form-control text-white" disabled="" value="<?=get_date($rows->date_viniete)?>" >
+                                <label>Agence</label>
+                                <input  type="text" class="form-control text-white" disabled="" value="<?=strtoupper($rows->assurances->agence)?>" >
                             </div>
                         </div>
-                        <br>
+                        <div class="row">
+                                <div class="col-md-6 px-md-1">
+                                        <label>Date debut</label>
+                                        <input type="text" class="form-control text-white" disabled="" value="<?=$rows->assurances->date_debut?>" >
+                                </div>
+                                <div class="col-md-6 px-md-1">
+                                        <label>Date fin</label>
+                                        <input type="text" class="form-control text-white" disabled="" value="<?=$rows->assurances->date_fin?> KM" >
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-4 px-md-1">
+                                        <label>Prix</label>
+                                        <input type="text" class="form-control text-white" disabled="" value="<?=$rows->assurances->prix?> DHs" >
+                                </div>
+                        </div>
+                        <hr>
                         <div class="row">
                                 <div class="col-md-6 px-md-1">
                                         <label>Derniere kilometrage</label>
-                                        <input type="text" class="form-control text-white" disabled="" value="<?=$rows->dernier_km?> KM" >
+                                        <input type="text" class="form-control text-white" disabled="" value="<?=$rows->kilometers->last_kilometer?>" >
+                                </div>
+                                <div class="col-md-6 px-md-1">
+                                        <label>Date</label>
+                                        <input type="text" class="form-control text-white" disabled="" value="<?=$rows->kilometers->date_added?>" >
                                 </div>
                         </div>
 
@@ -78,7 +98,7 @@
                                 <div class="block block-four"></div>
 
                                 <?php if($rows->image_voiture): ?>
-                                    <img src="<?=$rows->image_voiture?>" class="card-img-top">
+                                    <img src="<?=ROOT?>/<?=$rows->image_voiture?>" class="card-img-top">
                                 <?php else: ?>
                                     <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
                                 <?php endif; ?>
@@ -112,6 +132,7 @@
                                     <tr>
                                         <th>№</th>
                                         <th>Date d'entretien</th>
+                                        <th>Garage</th>
                                         <th>Type</th>
                                         <th>Description</th>
                                         <th>Prix</th>
@@ -126,6 +147,7 @@
                                             <tr>
                                                 <td><?=$num?></td>
                                                 <td><?=get_date($row->date_entretien)?></td>
+                                                <td><?=$row->garage?></td>
                                                 <td><?=$row->type_entretien?></td>
                                                 <td><?=$row->description?></td>
                                                 <td><?=$row->prix_entretien?> DHs</td>
@@ -136,11 +158,10 @@
 
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    
-                                        <h2 class="text-center">Pas de location a ce moment!</h2>
+
+                                        <tr>
+                                            <td colspan="7"><h2 class="text-center">Pas de entretiens a ce moment!</h2></td>
+                                        </tr>
                                         
                                     <?php endif; ?>
                                 </tbody>
@@ -149,6 +170,7 @@
                     </div>
                 </div>
                 </div>
+                <?php show($rows)?>
         </div>
 
         

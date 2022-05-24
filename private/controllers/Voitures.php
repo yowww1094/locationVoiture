@@ -22,19 +22,13 @@ class Voitures extends controller{
                 $model = (empty($_POST['model'])) ? "" : "%".$_POST['model']."%";
                 $date_assurance_depuis = (empty($_POST['date_assurance_depuis'])) ? "" : $_POST['date_assurance_depuis'];
                 $date_assurance_jusqua = (empty($_POST['date_assurance_jusqua'])) ? "" : $_POST['date_assurance_jusqua'];
-                $date_viniete_depuis = (empty($_POST['date_viniete_depuis'])) ? "" : $_POST['date_viniete_depuis'];
-                $date_viniete_jusqua = (empty($_POST['date_viniete_jusqua'])) ? "" : $_POST['date_viniete_jusqua'];
                 $state = (empty($_POST['state'])) ? "" : ($_POST['state'] == ('disponible') ? '1' : '0') ;
 
-                $stateCol = 'state';
-
-
-                $searchQuery = "SELECT * FROM voitures 
-                                    WHERE matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
-                                           OR date_assurance BETWEEN '$date_assurance_depuis' AND '$date_assurance_jusqua'
-                                           OR date_viniete BETWEEN '$date_viniete_depuis' AND '$date_viniete_jusqua'
-                                           OR $stateCol LIKE '$state'";
-                                           
+                $searchQuery = "SELECT * FROM voitures join assurances
+                                    ON voitures.matricule = assurances.matricule
+                                    WHERE voitures.matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
+                                        OR state = '$state' OR date_debut >= '$date_assurance_depuis'
+                                        AND date_fin <= '$date_assurance_jusqua'";
 
                 $searchResults = $voiture->query($searchQuery);
             }else{
@@ -45,7 +39,7 @@ class Voitures extends controller{
             
         }else{
 
-            $data = $voiture->orderBy('state');
+            $data = $voiture->orderBy('state', 'DESC');
         }
 
        
@@ -71,6 +65,7 @@ class Voitures extends controller{
         }
 
         $voiture = new Voiture();
+
         $car = $voiture->where('matricule', $carId);
 
         if($car){
@@ -92,8 +87,8 @@ class Voitures extends controller{
 
         $errors = array();
         $voiture = new Voiture();
-
-        
+        $assurances = new Assurance();
+        $kilometers = new Kilometer();
 
         if(count($_POST) > 0){
 
@@ -101,34 +96,37 @@ class Voitures extends controller{
             $matricule  = $_POST['matricule'];
             if($voiture->where("matricule", $matricule)){
 
-                $errors['car_existe'] = "La voiture déjà existe, essayez de changer matricule !";
+                $error['car_existe'] = "La voiture déjà existe! essayez de changer matricule.";
+                array_push($errors, $error);
             }else{
-
+                
                 #extracting image
-                if(count($_FILES)){
+                if(count($_FILES) > 0){
                     
-                    $_POST['image_voiture'] = extract_image($_FILES['image_voiture']);
+                    $error = array();
+                    
+                    $_POST['image_voiture'] = upload_image($_FILES['image_voiture']);   
+                    array_push($errors, $error);
+
                 }
 
-                if($voiture->validate($_POST)){
+                if($voiture->validate($_POST) && $assurances->validate($_POST) && $kilometers->validate($_POST)){
 
                     $_POST['date_added'] = date("Y-m-d");
-
+                    
                     $voiture->insert($_POST);
+                    $assurances->insert($_POST);
+                    $kilometers->insert($_POST);
 
+                    //(new Voiture_notification())->set_voiture_notif($_POST['matricule'], $_POST);
+
+                    $this->redirect('voitures/details/$matricule');
                 }else{
-                    $errors = $voiture->errors;
+                    array_push($errors, $voiture->errors);
+                    array_push($errors, $assurances->errors);
+                    array_push($errors, $kilometers->errors);
                 }
             }
-
-            // get car id and set notifications
-            $car_id = $voiture->where("matricule", $matricule);
-            if($car_id){
-                $car_id = $car_id[0]->matricule;
-            }
-
-            (new Voiture_notification())->set_voiture_notif($car_id, $_POST);
-
         }
 
         $this->view('voitures.add', [
@@ -162,7 +160,13 @@ class Voitures extends controller{
             #extracting image
             if(count($_FILES)){
                 
-                $_POST['image_voiture'] = extract_image($_FILES['image_voiture']);
+                $error = array();
+
+                if(upload_image($_FILES['image_voiture'])){
+                    $_POST['image_voiture'] = upload_image($_FILES['image_voiture']);
+                }
+
+                array_push($errors, $error);
             }
 
             if($voiture->validate($_POST)){

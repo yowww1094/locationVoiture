@@ -131,10 +131,10 @@
                                             <td><?=ucfirst($row->client->prenom)?></td>
                                             <td><?=ucfirst($row->client->nom)?></td>
                                             <td><?=$row->client->cin?></td>
-                                            <td><?=$row->date_location?></td>
+                                            <td><?=get_date($row->date_location)?></td>
                                             <td><?=$row->prix?> DHs</td>
-                                            <td><?=$row->date_depart?></td>
-                                            <td><?=$row->date_retour?></td>
+                                            <td><?=get_date($row->date_depart)?></td>
+                                            <td><?=get_date($row->date_retour)?></td>
                                             
                                         </tr>
 
@@ -156,10 +156,10 @@
                                             <td><?=ucfirst($row->client->prenom)?></td>
                                             <td><?=ucfirst($row->client->nom)?></td>
                                             <td><?=$row->client->cin?></td>
-                                            <td><?=$row->date_location?></td>
+                                            <td><?=get_date($row->date_location)?></td>
                                             <td><?=$row->prix?> DHs</td>
-                                            <td><?=$row->date_depart?></td>
-                                            <td><?=$row->date_retour?></td>
+                                            <td><?=get_date($row->date_depart)?></td>
+                                            <td><?=get_date($row->date_retour)?></td>
                                             
                                         </tr>
 

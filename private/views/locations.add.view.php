@@ -22,14 +22,14 @@
                         </div>
                 <?php endif;?>
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                         <div class="card">
                                 <div class="card-header">
                                         <h5 class="title">Informations du client:</h5>
                                 </div>
 
                                 <div class="card-body">
-                                        <form>
+                                        
                                                 <div class="row">
                                                         <div class="col-md-5 px-md-1">
                                                                 <div class="form-group">
@@ -110,7 +110,7 @@
                                                                 </div>
                                                         </div>
                                                 </div>
-                                        </form>
+                                        
                                 </div>
                                 <div class="card-footer">
                                         <button type="submit" class="btn btn-fill btn-primary float-right">Enregistrer</button>
@@ -132,22 +132,32 @@
                                                 <div class="block block-three"></div>
                                                 <div class="block block-four"></div>
                                                 <a href="#">
-                                                        <img class="avatar" src="" >
+
+                                                        <?php if($voiture->image_voiture): ?>
+
+                                                                <img src="<?=ROOT?>/<?=$voiture->image_voiture?>" class="card-img-top">
+
+                                                        <?php else: ?>
+
+                                                                <img src="<?=ASSETS?>/images/car-alt.png" class="card-img-top">
+
+                                                        <?php endif; ?>
+
                                                         <h5 class="title"><?=$voiture->marque?> <?=$voiture->model?></h5>
                                                 </a>
                                                 <p class="description">Matricule: <?=$voiture->matricule?></p>
                                         </div>
                                         </p>
                                         <div class="card-description">
-                                                <p>Date Assurance: <?=get_date($voiture->date_assurance)?></p>
-                                                <p>Date Viniete: <?=get_date($voiture->date_viniete)?></p>
-                                                <p>Dernirer kilometrage: <?=$voiture->dernier_km?> Km</p>
+                                                <p>Date Assurance: <?=get_date($voiture->assurances->date_debut)?> - <?=get_date($voiture->assurances->date_fin)?></p>
+                                                <p>Date Viniete: <?=get_date($voiture->viniete)?></p>
+                                                <p>Dernirer kilometrage: <?=$voiture->kilometers->last_kilometer?> Km</p>
                                         </div>
                                 </div>
                                 <div class="card-footer">
                                         <div class="button-container">
-                                                <a href="#">
-                                                        <button href="" class="btn btn-primary justify-content-center">Voir detailles..</button>  
+                                                <a href="<?=ROOT?>/voitures/details/<?=$voiture->matricule?>">
+                                                        <button type="button" class="btn btn-primary justify-content-center">Voir detailles..</button>  
                                                 </a>
                                                 
                                         </div>

@@ -48,8 +48,40 @@ function randomString($length){
     return $text;
 }
 
-function extract_image($image){
-    
+function upload_image($image){
+
+    $ext = explode('.', $image['name']);
+    $image_ext = strtolower(end($ext));
+
+    $allowed = array('jpeg','png','jpg');
+
+    if (in_array($image_ext, $allowed)){
+
+        if ($image['error'] == 0 ) {
+            
+            if($image['size'] < 500000 ){
+
+                $image_name = uniqid("IMG-", true) . '.' . $image_ext;
+                $folder = 'uploads/';
+
+                if(!file_exists($folder)){
+                    mkdir($folder, 0777, true);
+                }
+
+                $destination = $folder . $image_name;
+                move_uploaded_file($image['tmp_name'], $destination);
+
+                return $destination;
+
+            }else{
+                $error['size'] = "La taille de l'image est trop grande";
+            }
+        }else{
+            $error['error'] = "Une erreur s'est produite lors de l'envoie de l'image";
+        }
+    }else{
+        $error['type'] = "Type d'image n'est pas valide";
+    }
 }
 
 function date_duration($date1, $date2){
@@ -64,7 +96,7 @@ function date_duration($date1, $date2){
 
 function get_date($date){
     
-    return $date;
+    return date("j M, Y",strtotime($date));
 }
 
 function show($data){

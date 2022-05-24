@@ -74,13 +74,18 @@ class Clients extends controller{
             #extracting images
             if(count($_FILES) > 0){
 
-                $_POST['cin_img'] = extract_image($_FILES['cin_img']);
-                $_POST['permis_img'] = extract_image($_FILES['permis_img']);
+                $error = array();
 
+                if($_FILES['cin_img'] && $_FILES['permis_img']){
+                    foreach($_FILES as $key => $file){
+
+                        $_POST[$key] = upload_image($file);
+                        array_push($errors, $error);
+                    }
+                }
             }
-
             if($client->validate($_POST)){
-
+                
                 $client->update('id_client', $clientId, $_POST);
 
                 $this->redirect('clients');

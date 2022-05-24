@@ -63,6 +63,27 @@ class User extends Model{
         return true;
     }
 
+    public function searchValidate($data)
+    {
+        # code...
+        $this->errors = array();
+
+        $rank = ['admin', 'agent'];
+        if(empty($data['firstname']) && empty($data['lastname']) && !in_array($data['rank'], $rank)
+             && empty($data['date_location_depuis']) && empty($data['date_location_jusqua']))
+        {
+
+            $this->errors['error'] = "Vous devez remplir les champs pour rechercher!";
+        }       
+
+        if (count($this->errors) > 0) {
+            
+            return false;
+        }
+
+        return true;
+    }
+
     /*public function make_user_id($data){
 
         $data['user_id'] = $data['firstname'] . "." . $data['lastname'];

@@ -128,8 +128,13 @@ class Locations extends controller{
                 #extracting images
                 if(count($_FILES) > 0){
 
-                    $_POST['cin_img'] = extract_image($_FILES['cin_img']);
-                    $_POST['permis_img'] = extract_image($_FILES['permis_img']);
+                    $error = array();
+
+                    foreach($_FILES as $key => $file){
+                        
+                        $_POST[$key] = upload_image($file);
+                        array_push($errors, $error);
+                    }
                 }
 
                 if(!$client->validate($_POST) && !$location->validate($_POST)){
@@ -203,7 +208,6 @@ class Locations extends controller{
 
                         $this->redirect("locations/details/$id_location");
                     }
-                    
                 }
             }
         }else{
@@ -224,31 +228,31 @@ class Locations extends controller{
             $this->redirect('login');
         }
 
-        $errors = array();
-
-        if (isset($locationId)) {
+        if ($locationId == '') {
             
-            if(count($_POST) > 0){
-
-                $location = new Location();
-
-                if($location->validate($_POST)){
-
-                    $_POST['date_location'] = date("Y-m-d H:i:s");
-                    $_POST['duree_location'] = date_duration($_POST['date_depart'], $_POST['date_retour']);
-
-                    $location->update('id_location',$locationId, $_POST);
-
-                    // back to previous page
-                    $this->redirect("locations");
-                }else{
-                    $errors = $location->errors;
-                }
-            }
-        }else{
-            $this->redirect("locations");
+            $this->redirect('voitures');
         }
 
+        $location = new Location();
+        $errors = array();
+    
+        if(count($_POST) > 0){
+
+            if($location->validate($_POST)){
+
+                $_POST['date_location'] = date("Y-m-d H:i:s");
+                $_POST['duree_location'] = date_duration($_POST['date_depart'], $_POST['date_retour']);
+
+                $location->update('id_location',$locationId, $_POST);
+
+                // back to previous page
+                $this->redirect("locations/$locationId");
+            }else{
+
+                $errors = $location->errors;
+            }
+        }
+        
         $this->view('location.edit', [
             "errors" => $errors,
         ]);
@@ -256,23 +260,24 @@ class Locations extends controller{
 
     public function finLocation($locationId)
     {
+        if(!auth::logged_in()) {
+            
+            $this->redirect('login');
+        }
+
+        if ($locationId == '') {
+            
+            $this->redirect('voitures');
+        }
 
         $location = new Location();
-
-        if(isset($locationId)){
             
-            $res = $location->where('id_location', $locationId);
-            $matricule = $res[0]->voiture->matricule;
+        $res = $location->where('id_location', $locationId);
+        $matricule = $res[0]->voiture->matricule;
 
-            $voiture = new Voiture();
-            //$voiture->update('matricule', $matricule, ['state' => 1]);
+        $voiture = new Voiture();
+        //$voiture->update('matricule', $matricule, ['state' => 1]);
 
-
-
-        }else{
-
-            $this->redirect("locations");
-        }
 
         $this->view('locations.finLocation', [
             'row' => $res[0],

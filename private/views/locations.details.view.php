@@ -3,7 +3,7 @@
 <?php $this->view('includes/nav-bar'); ?>
         
         <div class="content">
-
+        <?php show($row)?>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -34,15 +34,60 @@
                                     </div>
                             </div>
                             <div class="row">
-                                    <div class="col-md-6 pr-md-1">
-                                            <label>CIN</label>
-                                            <input type="file" class="form-control" name="cin_image">
-                                    </div>
-                                    <div class="col-md-6 pl-md-1">
-                                            <label>Permis de conduit</label>
-                                            <input  type="file" class="form-control" name="permis_image">
+                                        <div class="col-md-6 pr-md-1">
+                                                <div data-toggle="collapse" data-target="#CinCollapse" aria-expanded="false" aria-controls="CinCollapse">
+                                                        <button class="btn btn-link text-light" type="button">
+                                                                CIN image:
+                                                        </button>
+                                                        <span class="float-right mx-auto p-3">
+                                                                <i class="fa-solid fa-chevron-down"></i>  
+                                                        </span>
+                                                        <hr>
+                                                </div>
 
-                                    </div>
+                                                <div class="row">
+                                                        <div class="col">
+                                                                <div class="collapse multi-collapse" id="CinCollapse">
+                                                                        <?php if($row->client->cin_img): ?>
+
+                                                                                <img src="<?=ROOT?>/<?=$row->client->cin_img?>">
+
+                                                                        <?php else: ?>
+                                                                                
+                                                                                <h4 class="text-center">CIN image n'existe pas!</h4>
+
+                                                                        <?php endif; ?>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-md-6 pl-md-1">
+                                                <div data-toggle="collapse" data-target="#PermisCollapse" aria-expanded="false" aria-controls="PermisCollapse">
+                                                        <button class="btn btn-link text-light" type="button">
+                                                                Permis image:
+                                                        </button>
+                                                        <span class="float-right mx-auto p-3">
+                                                                <i class="fa-solid fa-chevron-down"></i>  
+                                                        </span>
+                                                        <hr>
+                                                </div>
+
+                                                <div class="row">
+                                                        <div class="col">
+                                                                <div class="collapse multi-collapse" id="PermisCollapse">
+                                                                        <?php if($row->client->permis_img): ?>
+
+                                                                                <img src="<?=ROOT?>/<?=$row->client->permis_img?>">
+
+                                                                        <?php else: ?>
+                                                                                
+                                                                                <h4 class="text-center">Permis image n'existe pas!</h4>
+
+                                                                        <?php endif; ?>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
                             </div>
                             <div class="row">
                                     <div class="col-md-6 pr-md-1">
@@ -107,9 +152,9 @@
                                 </div>
                                 </p>
                                 <div class="card-description">
-                                        <p>Date Assurance: <?=get_date($row->voiture->date_assurance)?></p>
-                                        <p>Date Viniete: <?=get_date($row->voiture->date_viniete)?></p>
-                                        <p>Dernirer kilometrage: <?=$row->voiture->dernier_km?> Km</p>
+                                        <p>Date Assurance: <?=get_date($row->voiture->assurances->date_debut)?> - <?=get_date($row->voiture->assurances->date_debut)?></p>
+                                        <p>Date Viniete: <?=get_date($row->voiture->viniete)?></p>
+                                        <p>Dernirer kilometrage: <?=$row->voiture->kilometers->dernier_km?> Km</p>
                                 </div>
                         </div>
                         <div class="card-footer">
@@ -127,3 +172,18 @@
         </div>
 
 <?php $this->view('includes/footer'); ?>
+
+
+
+
+
+
+<div class="row">
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample2">
+      <div class="card card-body">
+        Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+      </div>
+    </div>
+  </div>
+</div>

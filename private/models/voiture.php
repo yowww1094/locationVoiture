@@ -6,10 +6,8 @@ class Voiture extends Model{
         'matricule',
         'marque',
         'model',
+        'viniete',
         'date_added',
-        'date_assurance',
-        'date_viniete',
-        'dernier_km',
         'image_voiture',
         'state',
     ];
@@ -17,15 +15,15 @@ class Voiture extends Model{
     protected $beforeInsert = [];
 
     protected $afterSelect = [
-        'get_entretien',
+        'get_entretiens',
+        'get_assurance',
+        'get_kilometer',
     ];
 
     public function validate($data)
     {
         # code...
         $this->errors = array();
-
-        $date = date("Y-m-d");
 
         # validate matricule
         if(empty($data['matricule']) || preg_match('/\//', $data['matricule'])){
@@ -42,19 +40,9 @@ class Voiture extends Model{
             $this->errors['model'] = "Model du voiture est vide !";
         }
 
-        #validate date_assurance
-        if(empty($data['date_assurance'])){
-            $this->errors['date_assurance'] = "Date d'assurance du voiture est invalide !";
-        }
-
-        #validate date_viniete
-        if(empty($data['date_viniete'])){
-            $this->errors['date_viniete'] = "Date de viniete du voiture est invalide !";
-        }
-
-        # validate dernire_km
-        if (empty($data['dernier_km'])) {
-            $this->errors['dernier_km'] = "Dernirer kilometrage du voiture est invalide !";
+        # validate viniete
+        if(empty($data['viniete'])){
+            $this->errors['viniete'] = "Date viniete du voiture est vide !";
         }
 
         if (count($this->errors) > 0) {
@@ -84,7 +72,7 @@ class Voiture extends Model{
         return true;
     }
 
-    public function get_entretien($data)
+    public function get_entretiens($data)
     {
 
         $entretien = new Entretien();
@@ -93,6 +81,40 @@ class Voiture extends Model{
 
                 $result = $entretien->where('matricule', $row->matricule);
                 $data[$key]->entretien = is_array($result) ? $result : false;
+            }
+        }
+        
+        return $data;
+    }
+
+    public function get_assurance($data)
+    {
+
+        $assurances = new Assurance();
+        if(is_array($data)){
+            foreach($data as $key => $row){
+
+                $query = 'select * from assurances where matricule =:matricule order by date_added desc';
+
+                $result = $assurances->query($query , ['matricule' => $row->matricule,]);
+                $data[$key]->assurances = is_array($result) ? $result[0] : false;
+            }
+        }
+        
+        return $data;
+    }
+
+    public function get_kilometer($data)
+    {
+
+        $kilometers = new Kilometer();
+        if(is_array($data)){
+            foreach($data as $key => $row){
+
+                $query = 'select * from kilometers where matricule =:matricule order by date_added desc';
+
+                $result = $kilometers->query($query , ['matricule' => $row->matricule]);
+                $data[$key]->kilometers = is_array($result) ? $result[0] : false;
             }
         }
         

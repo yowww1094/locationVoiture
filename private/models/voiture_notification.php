@@ -101,7 +101,6 @@ class Voiture_notification extends Model{
                 $count_notif += 1;
             }
         }
-        
 
         return $count_notif;
     }
