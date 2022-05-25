@@ -16,6 +16,10 @@ class Archives extends controller
         $searchResults = array();
         $errors = array();
 
+        $limit = 10;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
         if(count($_POST) > 0){
             if($user->searchValidate($_POST)){
 
@@ -37,18 +41,19 @@ class Archives extends controller
 
                 $searchQuery = "SELECT * FROM `locations` JOIN `users` ON locations.creator = users.id_user
                                     WHERE firstname LIKE '$firstname' OR lastname LIKE '$lastname'
-                                        OR `rank` = '$rank' OR date_location BETWEEN '$date_location_depuis' AND '$date_location_jusqua' ";
+                                        OR `rank` = '$rank' OR date_location BETWEEN '$date_location_depuis' AND '$date_location_jusqua' 
+                                        limit $limit offset $offset";
 
                 $searchResults = $user->query($searchQuery);
             }else{
 
                 $errors = $user->errors;
-                $data = $user->query("SELECT * FROM `locations` JOIN `users` ON locations.creator = users.id_user;");
+                $data = $user->query("SELECT * FROM `locations` JOIN `users` ON locations.creator = users.id_user limit $limit offset $offset;");
             }
             
         }else{
 
-            $data = $user->query("SELECT * FROM `locations` JOIN `users` ON locations.creator = users.id_user;");
+            $data = $user->query("SELECT * FROM `locations` JOIN `users` ON locations.creator = users.id_user limit $limit offset $offset;");
         }
 
        
@@ -56,6 +61,7 @@ class Archives extends controller
         $this->view('archives', [
             'rows' => $data,
             "searchResults" => $searchResults,
+            "pager" => $pager,
             "errors" => $errors,
         ]);
     }

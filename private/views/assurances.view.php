@@ -6,7 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card ">
-                    
                     <div class="card-header">
                         <h2 class="text-center mt-3">Tout les assurances!</h2>
                         <hr>
@@ -167,6 +166,7 @@
                             </table>
                         </div>
                     </div>
+                    <?php $pager->display() ?>
                 </div>
             </div>
         </div>

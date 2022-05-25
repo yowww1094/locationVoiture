@@ -16,6 +16,10 @@ class Entretiens extends controller
         $searchResults = array();
         $errors = array();
 
+        $limit = 10;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
         if(count($_POST) > 0){
             if($entretien->searchValidate($_POST)){
 
@@ -31,18 +35,18 @@ class Entretiens extends controller
                 $searchQuery = "SELECT * FROM `entretiens` JOIN `voitures` ON entretiens.matricule = voitures.matricule
                                     WHERE entretiens.matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
                                         OR type_entretien LIKE '$type_entretien' OR date_entretien >= '$dateMin' AND date_entretien <= '$dateMax'
-                                        OR prix_entretien BETWEEN '$prixMin' AND '$prixMax'";
-                                        show($searchQuery);                                        
+                                        OR prix_entretien BETWEEN '$prixMin' AND '$prixMax' limit $limit offset $offset";
+                                        
                 $searchResults = $voiture->query($searchQuery);
             }else{
 
                 $errors = $entretien->errors;
-                $data = $entretien->query("SELECT * FROM `entretiens` JOIN `voitures` ON entretiens.matricule = voitures.matricule;");
+                $data = $entretien->query("SELECT * FROM `entretiens` JOIN `voitures` ON entretiens.matricule = voitures.matricule limit $limit offset $offset;");
             }
             
         }else{
 
-            $data = $entretien->query("SELECT * FROM `entretiens` JOIN `voitures` ON entretiens.matricule = voitures.matricule;");
+            $data = $entretien->query("SELECT * FROM `entretiens` JOIN `voitures` ON entretiens.matricule = voitures.matricule limit $limit offset $offset;");
         }
 
        
@@ -50,6 +54,7 @@ class Entretiens extends controller
         $this->view('entretiens', [
             'rows' => $data,
             "searchResults" => $searchResults,
+            "pager" => $pager,
             "errors" => $errors,
         ]);
     }

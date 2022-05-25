@@ -14,6 +14,12 @@ class Locations extends controller{
         $searchResults = array();
         $errors = array();
 
+        $limit = 8;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
+        $query = "select * from locations limit $limit offset $offset";
+
         if(count($_POST) > 0){
             if($location->searchValidate($_POST)){
 
@@ -35,19 +41,19 @@ class Locations extends controller{
                                     WHERE voitures.matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
                                             OR nom LIKE '$nom' OR prenom LIKE '$prenom' OR cin LIKE '$cin'
                                             OR date_depart >= '$date_depart' AND date_retour <= '$date_retour' OR
-                                            prix BETWEEN '$prixMin' AND '$prixMax'";
+                                            prix BETWEEN '$prixMin' AND '$prixMax' limit $limit offset $offset";
                                             show($searchQuery);
 
                 $searchResults = $location->query($searchQuery);
             }else{
 
                 $errors = $location->errors;
-                $data = $location->findAll();
+                $data = $location->query($query);
             }
             
         }else{
 
-            $data = $location->findAll();
+            $data = $location->query($query);
         }
 
        
@@ -55,6 +61,7 @@ class Locations extends controller{
         $this->view('locations', [
             'rows' => $data,
             "searchResults" => $searchResults,
+            "pager" => $pager,
             "errors" => $errors,
         ]);
     }
@@ -102,7 +109,7 @@ class Locations extends controller{
 
         $location = new Location();
         # check car state
-        $query = 'select * from locations where matricule=:matricule';
+        $query = 'select * from locations where matricule=:matricule && state = 1';
         $carState = $location->query($query, ['matricule'=>$carId]);
 
         if($carState){
@@ -271,16 +278,36 @@ class Locations extends controller{
         }
 
         $location = new Location();
-            
+        $kilometer = new Kilometer();
+        $voiture = new Voiture();
+
+        $errors = array();
+
         $res = $location->where('id_location', $locationId);
         $matricule = $res[0]->voiture->matricule;
 
-        $voiture = new Voiture();
-        //$voiture->update('matricule', $matricule, ['state' => 1]);
+        if(count($_POST) > 0){
+            if($kilometer->validate($_POST)){
 
+                $_POST['date_added'] = date("Y-m-d");
+                $_POST['matricule'] = $matricule;
+
+                $kilometer->insert($_POST);
+
+                $location->update('id_location', $locationId, ['state' => 0]);
+                $voiture->update('matricule', $matricule, ['state' => 1]);
+
+                // back to previous page
+                $this->redirect("locations");
+            }else{
+
+                $errors = $kilometer->errors;
+            }
+        }
 
         $this->view('locations.finLocation', [
             'row' => $res[0],
+            'errors' => $errors,
         ]);
     }
 }

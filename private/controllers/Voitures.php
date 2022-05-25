@@ -14,6 +14,12 @@ class Voitures extends controller{
         $searchResults = array();
         $errors = array();
 
+        $limit = 8;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
+        $query = "select * from voitures limit $limit offset $offset";
+
         if(count($_POST) > 0){
             if($voiture->searchValidate($_POST)){
 
@@ -28,18 +34,18 @@ class Voitures extends controller{
                                     ON voitures.matricule = assurances.matricule
                                     WHERE voitures.matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
                                         OR state = '$state' OR date_debut >= '$date_assurance_depuis'
-                                        AND date_fin <= '$date_assurance_jusqua'";
+                                        AND date_fin <= '$date_assurance_jusqua' limit $limit offset $offset";
 
                 $searchResults = $voiture->query($searchQuery);
             }else{
 
                 $errors = $voiture->errors;
-                $data = $voiture->orderBy('state', 'DESC');
+                $data = $voiture->query($query);
             }
             
         }else{
 
-            $data = $voiture->orderBy('state', 'DESC');
+            $data = $voiture->query($query);
         }
 
        
@@ -47,6 +53,7 @@ class Voitures extends controller{
         $this->view('voitures', [
             'rows' => $data,
             "searchResults" => $searchResults,
+            "pager" => $pager,
             "errors" => $errors,
         ]);
     }

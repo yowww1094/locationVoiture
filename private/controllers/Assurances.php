@@ -15,6 +15,10 @@ class Assurances extends controller
         $searchResults = array();
         $errors = array();
 
+        $limit = 10;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
         if(count($_POST) > 0){
             if($assurances->searchValidate($_POST)){
 
@@ -31,18 +35,18 @@ class Assurances extends controller
                 $searchQuery = "SELECT * FROM assurances JOIN voitures ON assurances.matricule = voitures.matricule
                                     WHERE assurances.matricule LIKE '$matricule' OR marque LIKE '$marque' OR model LIKE '$model'
                                         OR numero LIKE '$numero' OR agence LIKE '$agence' OR date_debut LIKE '$date_debut' OR date_fin LIKE '$date_fin'
-                                        OR prix BETWEEN '$prixMin' AND '$prixMax'";     
+                                        OR prix BETWEEN '$prixMin' AND '$prixMax' limit $limit offset $offset";     
 
                 $searchResults = $assurances->query($searchQuery);
             }else{
 
                 $errors = $assurances->errors;
-                $data = $assurances->query("SELECT * FROM `assurances` JOIN `voitures` ON assurances.matricule = voitures.matricule ORDER BY assurances.date_added DESC;");
+                $data = $assurances->query("SELECT * FROM `assurances` JOIN `voitures` ON assurances.matricule = voitures.matricule ORDER BY assurances.date_added DESC limit $limit offset $offset;");
             }
             
         }else{
 
-            $data = $assurances->query("SELECT * FROM `assurances` JOIN `voitures` ON assurances.matricule = voitures.matricule ORDER BY assurances.date_added DESC");
+            $data = $assurances->query("SELECT * FROM `assurances` JOIN `voitures` ON assurances.matricule = voitures.matricule ORDER BY assurances.date_added DESC limit $limit offset $offset");
         }
 
        
@@ -50,6 +54,7 @@ class Assurances extends controller
         $this->view('assurances', [
             'rows' => $data,
             "searchResults" => $searchResults,
+            "pager" => $pager,
             "errors" => $errors,
         ]);
     }

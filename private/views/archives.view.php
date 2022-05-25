@@ -6,11 +6,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card ">
-                    
                     <div class="card-header">
                         <h2 class="text-center mt-3">Archives</h2>
                         <hr>
-
                         <div class="row">
                             <div class="col-8">
 
@@ -136,6 +134,7 @@
                             </table>
                         </div>
                     </div>
+                    <?php $pager->display() ?>
                 </div>
             </div>
         </div>

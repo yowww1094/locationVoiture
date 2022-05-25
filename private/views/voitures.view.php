@@ -196,6 +196,7 @@
                             <?php endif; ?>
                         </div>
                     </div>
+                    <?php $pager->display() ?>
                 </div>
             </div>
         </div>

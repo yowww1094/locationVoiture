@@ -14,6 +14,12 @@ class Clients extends controller{
         $searchResults = array();
         $errors = array();
 
+        $limit = 10;
+        $pager = new Pager($limit);
+        $offset = $pager->offset;
+
+        $query = "select * from clients  order by date_added DESC limit $limit offset $offset";
+
         if(count($_POST) > 0){
             if($client->searchValidate($_POST)){
 
@@ -22,19 +28,18 @@ class Clients extends controller{
                 $cin = (empty($_POST['cin'])) ? "" : "%".$_POST['cin']."%";
                 $client_phone = (empty($_POST['client_phone'])) ? "" : $_POST['client_phone'];
 
-                $searchQuery = "SELECT * FROM clients WHERE nom LIKE '$nom' OR prenom LIKE '$prenom' OR cin LIKE '$cin' OR client_phone LIKE '$client_phone'";
-                show($searchQuery);
+                $searchQuery = "SELECT * FROM clients WHERE nom LIKE '$nom' OR prenom LIKE '$prenom' OR cin LIKE '$cin' OR client_phone LIKE '$client_phone' limit $limit offset $offset";
 
                 $searchResults = $client->query($searchQuery);
             }else{
 
                 $errors = $client->errors;
-                $data = $client->orderBy('date_added', 'DESC');
+                $data = $client->query($query);
             }
             
         }else{
 
-            $data = $client->orderBy('date_added', 'DESC');
+            $data = $client->query($query);
         }
 
         
@@ -43,6 +48,7 @@ class Clients extends controller{
         [
             'rows' => $data,
             'searchResults' => $searchResults,
+            'pager' => $pager,
             'errors' => $errors,
         ]);
     }

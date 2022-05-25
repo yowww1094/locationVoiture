@@ -3,7 +3,6 @@
 <?php $this->view('includes/nav-bar'); ?>
         
         <div class="content">
-        <?php show($row)?>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -128,9 +127,11 @@
                                 <a href="<?=ROOT?>/locations/">
                                         <button type="button" class="btn btn-fill btn-danger">Retour</button>
                                 </a>
-                                <a href="<?=ROOT?>/locations/finLocation/<?=$row->id_location?>">
-                                        <button type="button" class="btn btn-fill btn-primary float-right">Fin de location</button>
-                                </a>
+                                <?php if($row->state == 1): ?>
+                                        <a href="<?=ROOT?>/locations/finLocation/<?=$row->id_location?>">
+                                                <button type="button" class="btn btn-fill btn-primary float-right">Fin de location</button>
+                                        </a>
+                                <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -172,18 +173,3 @@
         </div>
 
 <?php $this->view('includes/footer'); ?>
-
-
-
-
-
-
-<div class="row">
-  <div class="col">
-    <div class="collapse multi-collapse" id="multiCollapseExample2">
-      <div class="card card-body">
-        Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-      </div>
-    </div>
-  </div>
-</div>

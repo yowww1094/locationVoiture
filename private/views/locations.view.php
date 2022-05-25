@@ -112,7 +112,7 @@
                                     <th>Prix/jour</th>
                                     <th>Date depart</th>
                                     <th>Date retour</th>
-                                    
+                                    <th>Statue</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,7 +135,12 @@
                                             <td><?=$row->prix?> DHs</td>
                                             <td><?=get_date($row->date_depart)?></td>
                                             <td><?=get_date($row->date_retour)?></td>
-                                            
+
+                                            <?php if($row->state == 1): ?>
+                                                <td>En cours</td>
+                                            <?php elseif($row->state == 0): ?>
+                                                <td>Achevée</td>
+                                            <?php endif; ?>                                            
                                         </tr>
 
                                     <?php endforeach; ?>
@@ -189,8 +194,8 @@
                         </table>
                     </div>
                 </div>
+                <?php $pager->display() ?>
             </div>
-        
         </div>
     </div>   
     

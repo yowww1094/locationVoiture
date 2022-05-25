@@ -16,22 +16,21 @@ class Voiture_notification extends Model{
     {
 
         // calculate next date assurnce
-        $date_assurance = $data['date_assurance'];
-        $next_date_assurance = date('Y-m-d', strtotime('+1 year', strtotime($date_assurance)));
-        $date_notification_assurance = date('Y-m-d', strtotime('-1 week', strtotime($next_date_assurance)));
+        $date_fin_assurance = $data['date_fin'];
+        $date_notification_assurance = date('Y-m-d', strtotime('-1 week', strtotime($date_fin_assurance)));
 
         $assurance_arr = array();
 
         $assurance_arr['matricule'] = $carId;
         $assurance_arr['type_notification'] = 'assurance';
         $assurance_arr['date_notification'] = $date_notification_assurance;
-        $assurance_arr['next_date'] = $next_date_assurance;
+        $assurance_arr['next_date'] = $date_fin_assurance;
         $assurance_arr['state'] = '1';
 
         $this->insert($assurance_arr);
 
         // calculate next date viniete
-        $date_viniete = $data['date_viniete'];
+        $date_viniete = $data['viniete'];
         $next_date_viniete = date('Y-m-d', strtotime('+1 year', strtotime($date_viniete)));
         $date_notification_viniete = date('Y-m-d', strtotime('-1 week', strtotime($next_date_viniete)));
 
@@ -46,7 +45,7 @@ class Voiture_notification extends Model{
         $this->insert($viniete_arr);
 
         // calculate next date videnge
-        $videnge = $data['dernier_km'];
+        $videnge = $data['last_kilometer'];
 
 
     }
@@ -54,15 +53,14 @@ class Voiture_notification extends Model{
     public function update_voiture_notif($carId, $data)
     {
         // calculate next date assurnce
-        $date_assurance = $data['date_assurance'];
-        $next_date_assurance = date('Y-m-d', strtotime('+1 year', strtotime($date_assurance)));
-        $date_notification_assurance = date('Y-m-d', strtotime('-1 week', strtotime($next_date_assurance)));
+        $date_fin_assurance = $data['date_fin'];
+        $date_notification_assurance = date('Y-m-d', strtotime('-1 week', strtotime($date_fin_assurance)));
 
         $assurance_arr = array();
 
         $assurance_arr['matricule'] = $carId;
         $assurance_arr['date_notification'] = $date_notification_assurance;
-        $assurance_arr['next_date'] = $next_date_assurance;
+        $assurance_arr['next_date'] = $date_fin_assurance;
 
         $assurance_query = "update voiture_notifications set date_notification = :date_notification , next_date = :next_date where matricule = :matricule && type_notification = 'assurance'";
 
